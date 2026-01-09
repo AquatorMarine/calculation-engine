@@ -1,10 +1,9 @@
 {
-    "name": "@aquatormarine/calculation-engine",
-    "version": "1.0.0",
-    "type": "module",
-    "main": "index.js",
-    "exports": {
-      ".": "./index.js"
-    }
+  "name": "@aquatormarine/calculation-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
   }
-  
+}

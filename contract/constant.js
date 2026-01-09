@@ -79,7 +79,7 @@ const CONTRACT_STATUS = {
     "December",
   ];
   
-  export const ContractConstants = {
+  export default {
     CONTRACT_STATUS,
     LEAVE_CALCULATION_METHODS_CONSTANTS,
     SALARY_CALCULATION_METHODS_CONSTANTS,
