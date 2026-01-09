@@ -4,6 +4,4 @@ export type {
   SalaryCalculationType,
   LeaveType,
   LeaveCalculationMethodType,
-  EmploymentStatusType,
-  ContractType,
 } from "./constant.types.js";

@@ -24,21 +24,6 @@ export declare const LEAVE_TYPES: {
     readonly DAILY: "daily";
     readonly ROTATION: "rotation";
 };
-export declare const EMPLOYMENT_STATUS: {
-    readonly ACTIVE: "active";
-    readonly ENDED: "ended";
-};
-export declare const CONTRACT_TYPES: {
-    readonly START: "start";
-    readonly AMEND: "amend";
-    readonly END: "end";
-};
-export declare const SALARY_CALCULATION: {
-    readonly SALARY_30DAYS: "salary30days";
-    readonly SALARY_31DAYS: "salary31days";
-    readonly SALARY_12_365DAYS: "salary12*365days";
-    readonly SALARY_DAY_RATE: "dayRate";
-};
 export declare const LEAVE_CALCULATION_METHODS: {
     readonly annual: readonly [{
         readonly label: "Days Per Year ÷ 365";
@@ -121,21 +106,6 @@ declare const ContractConstants: {
         }];
     };
     DISPLAY_WORKING_DAYS: readonly ["daily", "rotation"];
-    SALARY_CALCULATION: {
-        readonly SALARY_30DAYS: "salary30days";
-        readonly SALARY_31DAYS: "salary31days";
-        readonly SALARY_12_365DAYS: "salary12*365days";
-        readonly SALARY_DAY_RATE: "dayRate";
-    };
-    CONTRACT_TYPES: {
-        readonly START: "start";
-        readonly AMEND: "amend";
-        readonly END: "end";
-    };
-    EMPLOYMENT_STATUS: {
-        readonly ACTIVE: "active";
-        readonly ENDED: "ended";
-    };
 };
 export { ContractConstants };
 export default ContractConstants;

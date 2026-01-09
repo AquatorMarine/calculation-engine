@@ -24,15 +24,6 @@ export const LEAVE_TYPES = {
     DAILY: "daily",
     ROTATION: "rotation",
 };
-// Employment status constants
-export const EMPLOYMENT_STATUS = {
-    ACTIVE: "active",
-    ENDED: "ended",
-};
-// Contract types (aliased to CONTRACT_STATUS for now, can be expanded if needed)
-export const CONTRACT_TYPES = CONTRACT_STATUS;
-// Salary calculation alias
-export const SALARY_CALCULATION = SALARY_CALCULATION_METHODS_CONSTANTS;
 export const LEAVE_CALCULATION_METHODS = {
     [LEAVE_TYPES.ANNUAL]: [
         {
@@ -79,9 +70,6 @@ const ContractConstants = {
     SALARY_CALCULATION_METHODS_CONSTANTS,
     LEAVE_CALCULATION_METHODS,
     DISPLAY_WORKING_DAYS,
-    SALARY_CALCULATION,
-    CONTRACT_TYPES,
-    EMPLOYMENT_STATUS,
 };
 export { ContractConstants };
 export default ContractConstants;

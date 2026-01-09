@@ -11,9 +11,3 @@ export type LeaveType =
 
 export type LeaveCalculationMethodType =
   (typeof ContractConstants.LEAVE_CALCULATION_METHODS)[keyof typeof ContractConstants.LEAVE_CALCULATION_METHODS];
-
-export type EmploymentStatusType =
-  (typeof ContractConstants.EMPLOYMENT_STATUS)[keyof typeof ContractConstants.EMPLOYMENT_STATUS];
-
-export type ContractType =
-  (typeof ContractConstants.CONTRACT_TYPES)[keyof typeof ContractConstants.CONTRACT_TYPES];
