@@ -120,5 +120,4 @@ declare const ContractConstants: {
     };
 };
 export { ContractConstants };
-export default ContractConstants;
 //# sourceMappingURL=constant.d.ts.map

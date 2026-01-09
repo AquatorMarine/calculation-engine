@@ -90,4 +90,3 @@ const ContractConstants = {
 };
 
 export { ContractConstants };
-export default ContractConstants;

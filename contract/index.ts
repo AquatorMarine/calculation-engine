@@ -6,12 +6,13 @@ export {
   SALARY_CALCULATION_METHODS_CONSTANTS,
   LEAVE_CALCULATION_METHODS,
   CONTRACT_TYPES,
-  default,
-} from "./constant.js";
+} from "./constant";
+
 export type {
   ContractStatusType,
   SalaryCalculationType,
   LeaveType,
   LeaveCalculationMethodType,
   ContractType,
-} from "./constant.types.js";
+} from "./constant.types";
+

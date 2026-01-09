@@ -79,4 +79,3 @@ const ContractConstants = {
     CONTRACT_TYPES,
 };
 export { ContractConstants };
-export default ContractConstants;

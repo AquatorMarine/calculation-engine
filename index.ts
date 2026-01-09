@@ -1,3 +1,2 @@
-// Default export
-import ContractConstants from "./contract/constant.js";
-export default { ContractConstants };
+// Default export re-exporting contract module contents
+export * as ContractModule from "./contract";
