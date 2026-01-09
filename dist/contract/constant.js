@@ -33,7 +33,7 @@ export const EMPLOYMENT_STATUS = {
 export const CONTRACT_TYPES = CONTRACT_STATUS;
 // Salary calculation alias
 export const SALARY_CALCULATION = SALARY_CALCULATION_METHODS_CONSTANTS;
-const LEAVE_CALCULATION_METHODS = {
+export const LEAVE_CALCULATION_METHODS = {
     [LEAVE_TYPES.ANNUAL]: [
         {
             label: "Days Per Year ÷ 365",

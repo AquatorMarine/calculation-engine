@@ -39,6 +39,33 @@ export declare const SALARY_CALCULATION: {
     readonly SALARY_12_365DAYS: "salary12*365days";
     readonly SALARY_DAY_RATE: "dayRate";
 };
+export declare const LEAVE_CALCULATION_METHODS: {
+    readonly annual: readonly [{
+        readonly label: "Days Per Year ÷ 365";
+        readonly value: "daysPerYear365";
+    }, {
+        readonly label: "Leave Entitlement - Leave Taken";
+        readonly value: "leaveEntitlementLeaveTaken";
+    }];
+    readonly monthly: readonly [{
+        readonly label: "Days Accrued ÷ 30days";
+        readonly value: "daysAccrued30days";
+    }, {
+        readonly label: "Days Accrued ÷ 31days";
+        readonly value: "daysAccrued31days";
+    }, {
+        readonly label: "Days Accrued x 12 ÷ 365days";
+        readonly value: "daysAccrued12365days";
+    }];
+    readonly daily: readonly [{
+        readonly label: "Days Accrued x Days Worked";
+        readonly value: "daysAccruedDaysWorked";
+    }];
+    readonly rotation: readonly [{
+        readonly label: "Days Accrued x Days Worked Based on Rotation";
+        readonly value: "daysAccruedDaysWorkedBasedOnRotation";
+    }];
+};
 declare const ContractConstants: {
     LEAVE_TYPES: {
         readonly ANNUAL: "annual";
