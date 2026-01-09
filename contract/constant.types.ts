@@ -1,4 +1,4 @@
-import { ContractConstants } from "./constant";
+import { ContractConstants } from "./constant.js";
 
 export type ContractStatusType =
   (typeof ContractConstants.CONTRACT_STATUS)[keyof typeof ContractConstants.CONTRACT_STATUS];
