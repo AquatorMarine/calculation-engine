@@ -5,6 +5,12 @@ export declare const LEAVE_TYPES: {
     readonly ROTATION: "rotation";
 };
 declare const ContractConstants: {
+    LEAVE_TYPES: {
+        readonly ANNUAL: "annual";
+        readonly MONTHLY: "monthly";
+        readonly DAILY: "daily";
+        readonly ROTATION: "rotation";
+    };
     CONTRACT_STATUS: {
         readonly START: "start";
         readonly AMEND: "amend";
