@@ -1,3 +1,9 @@
+export declare const LEAVE_TYPES: {
+    readonly ANNUAL: "annual";
+    readonly MONTHLY: "monthly";
+    readonly DAILY: "daily";
+    readonly ROTATION: "rotation";
+};
 declare const _default: {
     CONTRACT_STATUS: {
         readonly START: "start";
@@ -47,7 +53,6 @@ declare const _default: {
         }];
     };
     DISPLAY_WORKING_DAYS: readonly ["daily", "rotation"];
-    MONTHS_ARRAY: readonly ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 };
 export default _default;
 //# sourceMappingURL=constant.d.ts.map

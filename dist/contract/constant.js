@@ -18,8 +18,14 @@ const SALARY_CALCULATION_METHODS_CONSTANTS = {
     SALARY_12_365DAYS: "salary12*365days",
     SALARY_DAY_RATE: "dayRate",
 };
+export const LEAVE_TYPES = {
+    ANNUAL: "annual",
+    MONTHLY: "monthly",
+    DAILY: "daily",
+    ROTATION: "rotation",
+};
 const LEAVE_CALCULATION_METHODS = {
-    annual: [
+    [LEAVE_TYPES.ANNUAL]: [
         {
             label: "Days Per Year ÷ 365",
             value: LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_PER_YEAR_365,
@@ -29,7 +35,7 @@ const LEAVE_CALCULATION_METHODS = {
             value: LEAVE_CALCULATION_METHODS_CONSTANTS.LEAVE_ENTITLEMENT_LEAVE_TAKEN,
         },
     ],
-    monthly: [
+    [LEAVE_TYPES.MONTHLY]: [
         {
             label: "Days Accrued ÷ 30days",
             value: LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_30DAYS,
@@ -43,39 +49,24 @@ const LEAVE_CALCULATION_METHODS = {
             value: LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_12_365DAYS,
         },
     ],
-    daily: [
+    [LEAVE_TYPES.DAILY]: [
         {
             label: "Days Accrued x Days Worked",
             value: LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_DAYS_WORKED,
         },
     ],
-    rotation: [
+    [LEAVE_TYPES.ROTATION]: [
         {
             label: "Days Accrued x Days Worked Based on Rotation",
             value: LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_DAYS_WORKED_BASED_ON_ROTATION,
         },
     ],
 };
-const DISPLAY_WORKING_DAYS = ["daily", "rotation"];
-const MONTHS_ARRAY = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-];
+const DISPLAY_WORKING_DAYS = [LEAVE_TYPES.DAILY, LEAVE_TYPES.ROTATION];
 export default {
     CONTRACT_STATUS,
     LEAVE_CALCULATION_METHODS_CONSTANTS,
     SALARY_CALCULATION_METHODS_CONSTANTS,
     LEAVE_CALCULATION_METHODS,
     DISPLAY_WORKING_DAYS,
-    MONTHS_ARRAY,
 };
