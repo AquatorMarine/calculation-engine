@@ -62,6 +62,12 @@ export const LEAVE_CALCULATION_METHODS = {
         },
     ],
 };
+export const CONTRACT_TYPES = {
+    STANDARD: "standard",
+    ROTATION: "rotation",
+    DAYWORKER: "dayworker",
+    TEMPORARY: "temporary",
+};
 const DISPLAY_WORKING_DAYS = [LEAVE_TYPES.DAILY, LEAVE_TYPES.ROTATION];
 const ContractConstants = {
     LEAVE_TYPES,
@@ -70,6 +76,7 @@ const ContractConstants = {
     SALARY_CALCULATION_METHODS_CONSTANTS,
     LEAVE_CALCULATION_METHODS,
     DISPLAY_WORKING_DAYS,
+    CONTRACT_TYPES,
 };
 export { ContractConstants };
 export default ContractConstants;

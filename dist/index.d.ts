@@ -54,6 +54,12 @@ declare const _default: {
             }];
         };
         DISPLAY_WORKING_DAYS: readonly ["daily", "rotation"];
+        CONTRACT_TYPES: {
+            readonly STANDARD: "standard";
+            readonly ROTATION: "rotation";
+            readonly DAYWORKER: "dayworker";
+            readonly TEMPORARY: "temporary";
+        };
     };
 };
 export default _default;

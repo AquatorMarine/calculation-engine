@@ -51,6 +51,12 @@ export declare const LEAVE_CALCULATION_METHODS: {
         readonly value: "daysAccruedDaysWorkedBasedOnRotation";
     }];
 };
+export declare const CONTRACT_TYPES: {
+    readonly STANDARD: "standard";
+    readonly ROTATION: "rotation";
+    readonly DAYWORKER: "dayworker";
+    readonly TEMPORARY: "temporary";
+};
 declare const ContractConstants: {
     LEAVE_TYPES: {
         readonly ANNUAL: "annual";
@@ -106,6 +112,12 @@ declare const ContractConstants: {
         }];
     };
     DISPLAY_WORKING_DAYS: readonly ["daily", "rotation"];
+    CONTRACT_TYPES: {
+        readonly STANDARD: "standard";
+        readonly ROTATION: "rotation";
+        readonly DAYWORKER: "dayworker";
+        readonly TEMPORARY: "temporary";
+    };
 };
 export { ContractConstants };
 export default ContractConstants;
