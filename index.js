@@ -1,3 +1,3 @@
-import ContractConstants  from "./contract/constant";
+import ContractConstants  from "./contract/constant.js";
 
 export { ContractConstants };
