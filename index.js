@@ -1,3 +1,3 @@
-import { ContractConstants } from "./contract/contract";
+import { ContractConstants } from "./contract/constant";
 
 export { ContractConstants };
