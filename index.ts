@@ -1,1 +1,1 @@
-export * as ContractModule from "./contract/index";
+export * as ContractModule from "./contract/index.js";
