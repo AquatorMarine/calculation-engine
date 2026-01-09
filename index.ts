@@ -1,2 +1,1 @@
-// Default export re-exporting contract module contents
-export * as ContractModule from "./contract";
+export * as ContractModule from "./contract/index";
