@@ -9,6 +9,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.js"
+    },
+    "./contract/constant": {
+      "types": "./dist/contract/constant.d.ts",
+      "import": "./dist/contract/constant.js",
+      "require": "./dist/contract/constant.js"
     }
   },
   "files": [

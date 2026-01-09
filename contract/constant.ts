@@ -72,10 +72,13 @@ const LEAVE_CALCULATION_METHODS = {
 const DISPLAY_WORKING_DAYS = [LEAVE_TYPES.DAILY, LEAVE_TYPES.ROTATION] as const;
 
 
-export default {
+const ContractConstants = {
   CONTRACT_STATUS,
   LEAVE_CALCULATION_METHODS_CONSTANTS,
   SALARY_CALCULATION_METHODS_CONSTANTS,
   LEAVE_CALCULATION_METHODS,
   DISPLAY_WORKING_DAYS,
 };
+
+export { ContractConstants };
+export default ContractConstants;

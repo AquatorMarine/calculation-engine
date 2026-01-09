@@ -4,7 +4,7 @@ export declare const LEAVE_TYPES: {
     readonly DAILY: "daily";
     readonly ROTATION: "rotation";
 };
-declare const _default: {
+declare const ContractConstants: {
     CONTRACT_STATUS: {
         readonly START: "start";
         readonly AMEND: "amend";
@@ -54,5 +54,6 @@ declare const _default: {
     };
     DISPLAY_WORKING_DAYS: readonly ["daily", "rotation"];
 };
-export default _default;
+export { ContractConstants };
+export default ContractConstants;
 //# sourceMappingURL=constant.d.ts.map
