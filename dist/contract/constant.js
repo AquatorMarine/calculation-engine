@@ -1,9 +1,9 @@
-const CONTRACT_STATUS = {
+export const CONTRACT_STATUS = {
     START: "start",
     AMEND: "amend",
     END: "end",
 };
-const LEAVE_CALCULATION_METHODS_CONSTANTS = {
+export const LEAVE_CALCULATION_METHODS_CONSTANTS = {
     DAYS_PER_YEAR_365: "daysPerYear365",
     LEAVE_ENTITLEMENT_LEAVE_TAKEN: "leaveEntitlementLeaveTaken",
     DAYS_ACCRUED_30DAYS: "daysAccrued30days",
@@ -12,7 +12,7 @@ const LEAVE_CALCULATION_METHODS_CONSTANTS = {
     DAYS_ACCRUED_DAYS_WORKED: "daysAccruedDaysWorked",
     DAYS_ACCRUED_DAYS_WORKED_BASED_ON_ROTATION: "daysAccruedDaysWorkedBasedOnRotation",
 };
-const SALARY_CALCULATION_METHODS_CONSTANTS = {
+export const SALARY_CALCULATION_METHODS_CONSTANTS = {
     SALARY_30DAYS: "salary30days",
     SALARY_31DAYS: "salary31days",
     SALARY_12_365DAYS: "salary12*365days",
@@ -24,6 +24,15 @@ export const LEAVE_TYPES = {
     DAILY: "daily",
     ROTATION: "rotation",
 };
+// Employment status constants
+export const EMPLOYMENT_STATUS = {
+    ACTIVE: "active",
+    ENDED: "ended",
+};
+// Contract types (aliased to CONTRACT_STATUS for now, can be expanded if needed)
+export const CONTRACT_TYPES = CONTRACT_STATUS;
+// Salary calculation alias
+export const SALARY_CALCULATION = SALARY_CALCULATION_METHODS_CONSTANTS;
 const LEAVE_CALCULATION_METHODS = {
     [LEAVE_TYPES.ANNUAL]: [
         {
@@ -70,6 +79,9 @@ const ContractConstants = {
     SALARY_CALCULATION_METHODS_CONSTANTS,
     LEAVE_CALCULATION_METHODS,
     DISPLAY_WORKING_DAYS,
+    SALARY_CALCULATION,
+    CONTRACT_TYPES,
+    EMPLOYMENT_STATUS,
 };
 export { ContractConstants };
 export default ContractConstants;

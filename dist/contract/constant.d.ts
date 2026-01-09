@@ -1,8 +1,43 @@
+export declare const CONTRACT_STATUS: {
+    readonly START: "start";
+    readonly AMEND: "amend";
+    readonly END: "end";
+};
+export declare const LEAVE_CALCULATION_METHODS_CONSTANTS: {
+    readonly DAYS_PER_YEAR_365: "daysPerYear365";
+    readonly LEAVE_ENTITLEMENT_LEAVE_TAKEN: "leaveEntitlementLeaveTaken";
+    readonly DAYS_ACCRUED_30DAYS: "daysAccrued30days";
+    readonly DAYS_ACCRUED_31DAYS: "daysAccrued31days";
+    readonly DAYS_ACCRUED_12_365DAYS: "daysAccrued12365days";
+    readonly DAYS_ACCRUED_DAYS_WORKED: "daysAccruedDaysWorked";
+    readonly DAYS_ACCRUED_DAYS_WORKED_BASED_ON_ROTATION: "daysAccruedDaysWorkedBasedOnRotation";
+};
+export declare const SALARY_CALCULATION_METHODS_CONSTANTS: {
+    readonly SALARY_30DAYS: "salary30days";
+    readonly SALARY_31DAYS: "salary31days";
+    readonly SALARY_12_365DAYS: "salary12*365days";
+    readonly SALARY_DAY_RATE: "dayRate";
+};
 export declare const LEAVE_TYPES: {
     readonly ANNUAL: "annual";
     readonly MONTHLY: "monthly";
     readonly DAILY: "daily";
     readonly ROTATION: "rotation";
+};
+export declare const EMPLOYMENT_STATUS: {
+    readonly ACTIVE: "active";
+    readonly ENDED: "ended";
+};
+export declare const CONTRACT_TYPES: {
+    readonly START: "start";
+    readonly AMEND: "amend";
+    readonly END: "end";
+};
+export declare const SALARY_CALCULATION: {
+    readonly SALARY_30DAYS: "salary30days";
+    readonly SALARY_31DAYS: "salary31days";
+    readonly SALARY_12_365DAYS: "salary12*365days";
+    readonly SALARY_DAY_RATE: "dayRate";
 };
 declare const ContractConstants: {
     LEAVE_TYPES: {
@@ -59,6 +94,21 @@ declare const ContractConstants: {
         }];
     };
     DISPLAY_WORKING_DAYS: readonly ["daily", "rotation"];
+    SALARY_CALCULATION: {
+        readonly SALARY_30DAYS: "salary30days";
+        readonly SALARY_31DAYS: "salary31days";
+        readonly SALARY_12_365DAYS: "salary12*365days";
+        readonly SALARY_DAY_RATE: "dayRate";
+    };
+    CONTRACT_TYPES: {
+        readonly START: "start";
+        readonly AMEND: "amend";
+        readonly END: "end";
+    };
+    EMPLOYMENT_STATUS: {
+        readonly ACTIVE: "active";
+        readonly ENDED: "ended";
+    };
 };
 export { ContractConstants };
 export default ContractConstants;

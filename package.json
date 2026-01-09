@@ -14,6 +14,11 @@
       "types": "./dist/contract/constant.d.ts",
       "import": "./dist/contract/constant.js",
       "require": "./dist/contract/constant.js"
+    },
+    "./contract": {
+      "types": "./dist/contract/index.d.ts",
+      "import": "./dist/contract/index.js",
+      "require": "./dist/contract/index.js"
     }
   },
   "files": [
