@@ -68,7 +68,7 @@ export const CONTRACT_TYPES = {
     DAYWORKER: "dayworker",
     TEMPORARY: "temporary",
 };
-const DISPLAY_WORKING_DAYS = [LEAVE_TYPES.DAILY, LEAVE_TYPES.ROTATION];
+export const DISPLAY_WORKING_DAYS = [LEAVE_TYPES.DAILY, LEAVE_TYPES.ROTATION];
 const ContractConstants = {
     LEAVE_TYPES,
     CONTRACT_STATUS,

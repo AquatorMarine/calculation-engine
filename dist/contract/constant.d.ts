@@ -57,6 +57,7 @@ export declare const CONTRACT_TYPES: {
     readonly DAYWORKER: "dayworker";
     readonly TEMPORARY: "temporary";
 };
+export declare const DISPLAY_WORKING_DAYS: readonly ["daily", "rotation"];
 declare const ContractConstants: {
     LEAVE_TYPES: {
         readonly ANNUAL: "annual";
