@@ -77,7 +77,7 @@ export const CONTRACT_TYPES = {
   TEMPORARY: "temporary",
 } as const;
 
-const DISPLAY_WORKING_DAYS = [LEAVE_TYPES.DAILY, LEAVE_TYPES.ROTATION] as const;
+export const DISPLAY_WORKING_DAYS = [LEAVE_TYPES.DAILY, LEAVE_TYPES.ROTATION] as const;
 
 const ContractConstants = {
   LEAVE_TYPES,
