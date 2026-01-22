@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json && node scripts/rename-cjs.js",
+    "build:cjs": "tsc -p tsconfig.cjs.json && node scripts/rename-cjs.js && node scripts/scripts/fix-cjs-requires.js",
     "build": "npm run build:esm && npm run build:cjs"
   },
   "devDependencies": {
