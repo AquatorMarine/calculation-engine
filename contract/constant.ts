@@ -10,7 +10,7 @@ export const LEAVE_CALCULATION_METHODS_CONSTANTS = {
   DAYS_ACCRUED_30DAYS: "daysAccrued30days",
   DAYS_ACCRUED_31DAYS: "daysAccrued31days",
   DAYS_ACCRUED_12_365DAYS: "daysAccrued12365days",
-  DAYS_ACCRUED_DAYS_WORKED: "daysAccruedDaysWorked",
+  // DAYS_ACCRUED_DAYS_WORKED: "daysAccruedDaysWorked",
   DAYS_ACCRUED_DAYS_WORKED_BASED_ON_ROTATION:
     "daysAccruedDaysWorkedBasedOnRotation",
 } as const;
@@ -55,12 +55,12 @@ export const LEAVE_CALCULATION_METHODS = {
       value: LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_12_365DAYS,
     },
   ],
-  [LEAVE_TYPES.DAILY]: [
-    {
-      label: "Days Accrued x Days Worked",
-      value: LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_DAYS_WORKED,
-    },
-  ],
+  // [LEAVE_TYPES.DAILY]: [
+  //   {
+  //     label: "Days Accrued x Days Worked",
+  //     value: LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_DAYS_WORKED,
+  //   },
+  // ],
   [LEAVE_TYPES.ROTATION]: [
     {
       label: "Days Accrued x Days Worked Based on Rotation",

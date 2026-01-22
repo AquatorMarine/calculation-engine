@@ -9,7 +9,6 @@ export declare const LEAVE_CALCULATION_METHODS_CONSTANTS: {
     readonly DAYS_ACCRUED_30DAYS: "daysAccrued30days";
     readonly DAYS_ACCRUED_31DAYS: "daysAccrued31days";
     readonly DAYS_ACCRUED_12_365DAYS: "daysAccrued12365days";
-    readonly DAYS_ACCRUED_DAYS_WORKED: "daysAccruedDaysWorked";
     readonly DAYS_ACCRUED_DAYS_WORKED_BASED_ON_ROTATION: "daysAccruedDaysWorkedBasedOnRotation";
 };
 export declare const SALARY_CALCULATION_METHODS_CONSTANTS: {
@@ -42,10 +41,6 @@ export declare const LEAVE_CALCULATION_METHODS: {
         readonly label: "Days Accrued x 12 ÷ 365days";
         readonly value: "daysAccrued12365days";
     }];
-    readonly daily: readonly [{
-        readonly label: "Days Accrued x Days Worked";
-        readonly value: "daysAccruedDaysWorked";
-    }];
     readonly rotation: readonly [{
         readonly label: "Days Accrued x Days Worked Based on Rotation";
         readonly value: "daysAccruedDaysWorkedBasedOnRotation";
@@ -76,7 +71,6 @@ declare const ContractConstants: {
         readonly DAYS_ACCRUED_30DAYS: "daysAccrued30days";
         readonly DAYS_ACCRUED_31DAYS: "daysAccrued31days";
         readonly DAYS_ACCRUED_12_365DAYS: "daysAccrued12365days";
-        readonly DAYS_ACCRUED_DAYS_WORKED: "daysAccruedDaysWorked";
         readonly DAYS_ACCRUED_DAYS_WORKED_BASED_ON_ROTATION: "daysAccruedDaysWorkedBasedOnRotation";
     };
     SALARY_CALCULATION_METHODS_CONSTANTS: {
@@ -102,10 +96,6 @@ declare const ContractConstants: {
         }, {
             readonly label: "Days Accrued x 12 ÷ 365days";
             readonly value: "daysAccrued12365days";
-        }];
-        readonly daily: readonly [{
-            readonly label: "Days Accrued x Days Worked";
-            readonly value: "daysAccruedDaysWorked";
         }];
         readonly rotation: readonly [{
             readonly label: "Days Accrued x Days Worked Based on Rotation";
