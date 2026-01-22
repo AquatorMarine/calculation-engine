@@ -2,32 +2,38 @@
   "name": "@aquatormarine/calculation-engine",
   "version": "1.0.0",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
-    },
-    "./contract/constant": {
-      "types": "./dist/contract/constant.d.ts",
-      "import": "./dist/contract/constant.js",
-      "require": "./dist/contract/constant.js"
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
     },
     "./contract": {
-      "types": "./dist/contract/index.d.ts",
-      "import": "./dist/contract/index.js",
-      "require": "./dist/contract/index.js"
+      "types": "./dist/esm/contract/index.d.ts",
+      "import": "./dist/esm/contract/index.js",
+      "require": "./dist/cjs/contract/index.cjs"
+    },
+    "./contract/constant": {
+      "types": "./dist/esm/contract/constant.d.ts",
+      "import": "./dist/esm/contract/constant.js",
+      "require": "./dist/cjs/contract/constant.cjs"
     }
   },
-  "files": [
-    "dist"
-  ],
+
+  "files": ["dist"],
+
   "scripts": {
-    "build": "tsc",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "npm run build:esm && npm run build:cjs",
     "prepublishOnly": "npm run build"
   },
+
   "devDependencies": {
     "typescript": "^5.0.0"
   }
