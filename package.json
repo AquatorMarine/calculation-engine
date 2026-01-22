@@ -2,11 +2,9 @@
   "name": "@aquatormarine/calculation-engine",
   "version": "1.0.0",
   "type": "module",
-
   "main": "./dist/cjs/index.cjs",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
-
   "exports": {
     ".": {
       "types": "./dist/esm/index.d.ts",
@@ -24,16 +22,14 @@
       "require": "./dist/cjs/contract/constant.cjs"
     }
   },
-
-  "files": ["dist"],
-
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build": "npm run build:esm && npm run build:cjs",
-    "prepublishOnly": "npm run build"
+    "build:cjs": "tsc -p tsconfig.cjs.json && node scripts/rename-cjs.js",
+    "build": "npm run build:esm && npm run build:cjs"
   },
-
   "devDependencies": {
     "typescript": "^5.0.0"
   }
