@@ -20,6 +20,11 @@
       "types": "./dist/esm/contract/constant.d.ts",
       "import": "./dist/esm/contract/constant.js",
       "require": "./dist/cjs/contract/constant.cjs"
+    },
+    "./rotation": {
+      "types": "./dist/esm/rotation/index.d.ts",
+      "import": "./dist/esm/rotation/index.js",
+      "require": "./dist/cjs/rotation/index.cjs"
     }
   },
   "files": [
