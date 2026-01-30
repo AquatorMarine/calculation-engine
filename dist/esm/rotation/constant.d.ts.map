@@ -1,1 +1,1 @@
-{"version":3,"file":"constant.d.ts","sourceRoot":"","sources":["../../../rotation/constant.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,oBAAoB;;;CAGvB,CAAC;AAEX,QAAA,MAAM,iBAAiB;;;;;CAEtB,CAAC;AAEF,OAAO,EAAE,iBAAiB,EAAE,CAAC"}
+{"version":3,"file":"constant.d.ts","sourceRoot":"","sources":["../../../rotation/constant.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,oBAAoB;;;CAGvB,CAAC;AAEX,eAAO,MAAM,0BAA0B;;;CAG7B,CAAC;AAEX,QAAA,MAAM,iBAAiB;;;;;;;;;CAGtB,CAAC;AAEF,OAAO,EAAE,iBAAiB,EAAE,CAAC"}
