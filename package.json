@@ -25,6 +25,11 @@
       "types": "./dist/esm/rotation/index.d.ts",
       "import": "./dist/esm/rotation/index.js",
       "require": "./dist/cjs/rotation/index.cjs"
+    },
+    "./rotation/constant": {
+      "types": "./dist/esm/rotation/constant.d.ts",
+      "import": "./dist/esm/rotation/constant.js",
+      "require": "./dist/cjs/rotation/constant.cjs"
     }
   },
   "files": [
