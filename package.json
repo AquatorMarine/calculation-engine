@@ -30,6 +30,11 @@
       "types": "./dist/esm/rotation/constant.d.ts",
       "import": "./dist/esm/rotation/constant.js",
       "require": "./dist/cjs/rotation/constant.cjs"
+    },
+    "./dates": {
+      "types": "./dist/esm/dates/index.d.ts",
+      "import": "./dist/esm/dates/index.js",
+      "require": "./dist/cjs/dates/index.cjs"
     }
   },
   "files": [
@@ -39,6 +44,9 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json && node scripts/rename-cjs.js && node scripts/scripts/fix-cjs-requires.js",
     "build": "npm run build:esm && npm run build:cjs"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.19"
   },
   "devDependencies": {
     "typescript": "^5.0.0"

@@ -33,6 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RotationModule = exports.ContractModule = void 0;
+exports.DatesModule = exports.RotationModule = exports.ContractModule = void 0;
 exports.ContractModule = __importStar(require("./contract/index.cjs"));
 exports.RotationModule = __importStar(require("./rotation/index.cjs"));
+exports.DatesModule = __importStar(require("./dates/index.cjs"));
