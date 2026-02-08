@@ -69,6 +69,34 @@ export const CONTRACT_TYPES = {
     TEMPORARY: "temporary",
 };
 export const DISPLAY_WORKING_DAYS = [LEAVE_TYPES.DAILY, LEAVE_TYPES.ROTATION];
+export const MONTHS_ARRAY = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+];
+export const LEAVE_COUNT_TYPES = {
+    MONTHLY: "monthly",
+    TYPEWISE: "typewise",
+    TOTAL: "total",
+};
+export const EXCLUDED_LEAVE_TYPES = [
+    "Sick Leave",
+    "Study Leave",
+    "Unpaid",
+    "Shore Leave",
+];
+export const allLeaveCalculationDecimalPlaces = (num) => {
+    return parseFloat(num.toFixed(3));
+};
 const ContractConstants = {
     LEAVE_TYPES,
     CONTRACT_STATUS,
@@ -77,5 +105,9 @@ const ContractConstants = {
     LEAVE_CALCULATION_METHODS,
     DISPLAY_WORKING_DAYS,
     CONTRACT_TYPES,
+    MONTHS_ARRAY,
+    LEAVE_COUNT_TYPES,
+    EXCLUDED_LEAVE_TYPES,
+    allLeaveCalculationDecimalPlaces,
 };
 export { ContractConstants };

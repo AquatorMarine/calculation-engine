@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContractConstants = exports.DISPLAY_WORKING_DAYS = exports.CONTRACT_TYPES = exports.LEAVE_CALCULATION_METHODS = exports.LEAVE_TYPES = exports.SALARY_CALCULATION_METHODS_CONSTANTS = exports.LEAVE_CALCULATION_METHODS_CONSTANTS = exports.CONTRACT_STATUS = void 0;
+exports.ContractConstants = exports.allLeaveCalculationDecimalPlaces = exports.EXCLUDED_LEAVE_TYPES = exports.LEAVE_COUNT_TYPES = exports.MONTHS_ARRAY = exports.DISPLAY_WORKING_DAYS = exports.CONTRACT_TYPES = exports.LEAVE_CALCULATION_METHODS = exports.LEAVE_TYPES = exports.SALARY_CALCULATION_METHODS_CONSTANTS = exports.LEAVE_CALCULATION_METHODS_CONSTANTS = exports.CONTRACT_STATUS = void 0;
 exports.CONTRACT_STATUS = {
     START: "start",
     AMEND: "amend",
@@ -72,6 +72,35 @@ exports.CONTRACT_TYPES = {
     TEMPORARY: "temporary",
 };
 exports.DISPLAY_WORKING_DAYS = [exports.LEAVE_TYPES.DAILY, exports.LEAVE_TYPES.ROTATION];
+exports.MONTHS_ARRAY = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+];
+exports.LEAVE_COUNT_TYPES = {
+    MONTHLY: "monthly",
+    TYPEWISE: "typewise",
+    TOTAL: "total",
+};
+exports.EXCLUDED_LEAVE_TYPES = [
+    "Sick Leave",
+    "Study Leave",
+    "Unpaid",
+    "Shore Leave",
+];
+const allLeaveCalculationDecimalPlaces = (num) => {
+    return parseFloat(num.toFixed(3));
+};
+exports.allLeaveCalculationDecimalPlaces = allLeaveCalculationDecimalPlaces;
 const ContractConstants = {
     LEAVE_TYPES: exports.LEAVE_TYPES,
     CONTRACT_STATUS: exports.CONTRACT_STATUS,
@@ -80,5 +109,9 @@ const ContractConstants = {
     LEAVE_CALCULATION_METHODS: exports.LEAVE_CALCULATION_METHODS,
     DISPLAY_WORKING_DAYS: exports.DISPLAY_WORKING_DAYS,
     CONTRACT_TYPES: exports.CONTRACT_TYPES,
+    MONTHS_ARRAY: exports.MONTHS_ARRAY,
+    LEAVE_COUNT_TYPES: exports.LEAVE_COUNT_TYPES,
+    EXCLUDED_LEAVE_TYPES: exports.EXCLUDED_LEAVE_TYPES,
+    allLeaveCalculationDecimalPlaces: exports.allLeaveCalculationDecimalPlaces,
 };
 exports.ContractConstants = ContractConstants;

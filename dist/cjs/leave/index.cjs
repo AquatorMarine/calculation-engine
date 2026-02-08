@@ -10,7 +10,6 @@ const minMax_1 = __importDefault(require("dayjs/plugin/minMax"));
 const isSameOrBefore_1 = __importDefault(require("dayjs/plugin/isSameOrBefore"));
 const isSameOrAfter_1 = __importDefault(require("dayjs/plugin/isSameOrAfter"));
 const constant_js_1 = require("../contract/constant.cjs");
-const constant_js_2 = require("./constant.cjs");
 dayjs_1.default.extend(isBetween_1.default);
 dayjs_1.default.extend(minMax_1.default);
 dayjs_1.default.extend(isSameOrBefore_1.default);
@@ -353,14 +352,14 @@ const getFilterdContractWithStartDateAndEndDate = (contracts, startDate, endDate
     });
 };
 exports.getFilterdContractWithStartDateAndEndDate = getFilterdContractWithStartDateAndEndDate;
-const calculateLeaveWithAccruableCommon = (timeoffs, activeContract, leaveType, nonAccruableLeaves = false, startDatem, endDatem, leaveCountType = constant_js_2.LEAVE_COUNT_TYPES.TOTAL) => {
+const calculateLeaveWithAccruableCommon = (timeoffs, activeContract, leaveType, nonAccruableLeaves = false, startDatem, endDatem, leaveCountType = constant_js_1.LEAVE_COUNT_TYPES.TOTAL) => {
     const globalStart = startDatem
         ? (0, dayjs_1.default)(startDatem)
         : (0, dayjs_1.default)((0, exports.leaveAccrualStartDate)(activeContract));
     const globalEnd = endDatem
         ? (0, dayjs_1.default)(endDatem)
         : (0, dayjs_1.default)((0, exports.leaveAccrualEndDate)(timeoffs));
-    const monthWiseCounts = constant_js_2.MONTHS_ARRAY.map((month) => ({
+    const monthWiseCounts = constant_js_1.MONTHS_ARRAY.map((month) => ({
         x: month,
         y: 0,
     }));
@@ -369,7 +368,7 @@ const calculateLeaveWithAccruableCommon = (timeoffs, activeContract, leaveType, 
     timeoffs?.forEach((leave) => {
         const isApproved = leave.status === "Approved";
         const isTargetType = !leaveType || leave.type === leaveType;
-        const isExcluded = !leaveType && constant_js_2.EXCLUDED_LEAVE_TYPES.includes(leave.type ?? "");
+        const isExcluded = !leaveType && constant_js_1.EXCLUDED_LEAVE_TYPES.includes(leave.type ?? "");
         const finalCheck = nonAccruableLeaves === false
             ? !isExcluded
             : nonAccruableLeaves?.has(leave.type ?? "") ?? false;
@@ -386,11 +385,11 @@ const calculateLeaveWithAccruableCommon = (timeoffs, activeContract, leaveType, 
                     });
                     if (!isTravelDay) {
                         totalLeaveCount++;
-                        if (leaveCountType === constant_js_2.LEAVE_COUNT_TYPES.MONTHLY) {
+                        if (leaveCountType === constant_js_1.LEAVE_COUNT_TYPES.MONTHLY) {
                             const monthIndex = currentDay.month();
                             monthWiseCounts[monthIndex].y++;
                         }
-                        if (leaveCountType === constant_js_2.LEAVE_COUNT_TYPES.TYPEWISE) {
+                        if (leaveCountType === constant_js_1.LEAVE_COUNT_TYPES.TYPEWISE) {
                             const leaveTypeName = leave.type || "Unknown";
                             typeWiseCounts[leaveTypeName] =
                                 (typeWiseCounts[leaveTypeName] || 0) + 1;
@@ -401,10 +400,10 @@ const calculateLeaveWithAccruableCommon = (timeoffs, activeContract, leaveType, 
             }
         }
     });
-    if (leaveCountType === constant_js_2.LEAVE_COUNT_TYPES.TYPEWISE) {
+    if (leaveCountType === constant_js_1.LEAVE_COUNT_TYPES.TYPEWISE) {
         return typeWiseCounts;
     }
-    if (leaveCountType === constant_js_2.LEAVE_COUNT_TYPES.MONTHLY) {
+    if (leaveCountType === constant_js_1.LEAVE_COUNT_TYPES.MONTHLY) {
         return monthWiseCounts;
     }
     return totalLeaveCount;
@@ -479,20 +478,20 @@ const getDailyAccruedLeaveNew = (method, enti, daysDiff = 1) => {
     switch (method) {
         case constant_js_1.LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_PER_YEAR_365:
             dailyLeave =
-                (0, constant_js_2.allLeaveCalculationDecimalPlaces)(entitlement / 365) * daysDiff;
+                (0, constant_js_1.allLeaveCalculationDecimalPlaces)(entitlement / 365) * daysDiff;
             break;
         case constant_js_1.LEAVE_CALCULATION_METHODS_CONSTANTS.LEAVE_ENTITLEMENT_LEAVE_TAKEN:
             dailyLeave = 0;
             break;
         case constant_js_1.LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_30DAYS:
-            dailyLeave = (0, constant_js_2.allLeaveCalculationDecimalPlaces)(entitlement / 30) * daysDiff;
+            dailyLeave = (0, constant_js_1.allLeaveCalculationDecimalPlaces)(entitlement / 30) * daysDiff;
             break;
         case constant_js_1.LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_31DAYS:
-            dailyLeave = (0, constant_js_2.allLeaveCalculationDecimalPlaces)(entitlement / 31) * daysDiff;
+            dailyLeave = (0, constant_js_1.allLeaveCalculationDecimalPlaces)(entitlement / 31) * daysDiff;
             break;
         case constant_js_1.LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_12_365DAYS:
             dailyLeave =
-                (0, constant_js_2.allLeaveCalculationDecimalPlaces)((entitlement * 12) / 365) * daysDiff;
+                (0, constant_js_1.allLeaveCalculationDecimalPlaces)((entitlement * 12) / 365) * daysDiff;
             break;
         case constant_js_1.LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_DAYS_WORKED:
             dailyLeave = +entitlement;
@@ -503,7 +502,7 @@ const getDailyAccruedLeaveNew = (method, enti, daysDiff = 1) => {
         default:
             return 0;
     }
-    return (0, constant_js_2.allLeaveCalculationDecimalPlaces)(dailyLeave);
+    return (0, constant_js_1.allLeaveCalculationDecimalPlaces)(dailyLeave);
 };
 exports.getDailyAccruedLeaveNew = getDailyAccruedLeaveNew;
 const getLeaveAccrualNew = (method, entitlement, startDate, endDate, workingDays, userId) => {
@@ -530,13 +529,13 @@ const getLeaveAccrualNew = (method, entitlement, startDate, endDate, workingDays
 exports.getLeaveAccrualNew = getLeaveAccrualNew;
 const calculateNonAccruableLeave = (timeoffs, activeContract, leaveType, accrualSets) => {
     const nonAccruableLeaves = accrualSets?.nonAccruable;
-    const leaveCount = (0, exports.calculateLeaveWithAccruableCommon)(timeoffs, activeContract, leaveType, nonAccruableLeaves ?? false, undefined, undefined, constant_js_2.LEAVE_COUNT_TYPES.TOTAL);
+    const leaveCount = (0, exports.calculateLeaveWithAccruableCommon)(timeoffs, activeContract, leaveType, nonAccruableLeaves ?? false, undefined, undefined, constant_js_1.LEAVE_COUNT_TYPES.TOTAL);
     const totalLeaveToNonAccruable = leaveCount *
         (0, exports.getDailyAccruedLeaveNew)(activeContract?.leave?.calculationMethod, activeContract?.leave?.leaveEntitlement);
     return totalLeaveToNonAccruable;
 };
 exports.calculateNonAccruableLeave = calculateNonAccruableLeave;
-const totalLeaveTakenFromHireDateNew = (timeoffs, activeContract, startDatem, endDatem, workingDays, userId, leaveType, leaveCountType = constant_js_2.LEAVE_COUNT_TYPES.TOTAL) => {
+const totalLeaveTakenFromHireDateNew = (timeoffs, activeContract, startDatem, endDatem, workingDays, userId, leaveType, leaveCountType = constant_js_1.LEAVE_COUNT_TYPES.TOTAL) => {
     if (!timeoffs?.length)
         return 0;
     const globalStart = startDatem
@@ -575,7 +574,7 @@ const calculateLeaveNew = (paySlipHistory, timeoffs, activeContract, workingDays
         : 0;
     const usedLeave = (0, exports.totalLeaveTakenFromHireDateNew)(timeoffs, activeContract, leaveAcStartDate, leaveAcEndDate, activeContract?.contractType === constant_js_1.CONTRACT_TYPES.ROTATION
         ? rotationWorkedDays
-        : null, userId, undefined, constant_js_2.LEAVE_COUNT_TYPES.TOTAL);
+        : null, userId, undefined, constant_js_1.LEAVE_COUNT_TYPES.TOTAL);
     const nonAccrualLeave = (0, exports.calculateNonAccruableLeave)(timeoffs, activeContract, undefined, accrualSets);
     const payslipLeaveAdjustments = (0, exports.getPayslipLeaveAdjustments)(paySlipHistory, activeContract);
     const totalLeave = +carriedOverLeave +
@@ -583,7 +582,7 @@ const calculateLeaveNew = (paySlipHistory, timeoffs, activeContract, workingDays
         usedLeave -
         nonAccrualLeave -
         payslipLeaveAdjustments;
-    return (0, constant_js_2.allLeaveCalculationDecimalPlaces)(totalLeave);
+    return (0, constant_js_1.allLeaveCalculationDecimalPlaces)(totalLeave);
 };
 exports.calculateLeaveNew = calculateLeaveNew;
 const getLeaveAccrualMultipleContracts = (contracts, workingDays, startDate, endDate, userId, _timeoffs, filter = false) => {
@@ -608,7 +607,7 @@ const getLeaveAccrualMultipleContracts = (contracts, workingDays, startDate, end
         const totalLeave = (0, exports.getLeaveAccrualNew)(leaveCalculationMethod, leaveEntitlement, contract?.startDateForSegmentCalculation ?? undefined, contract?.endDateForSegmentCalculation ?? undefined, workingDays, userId);
         return acc + totalLeave;
     }, 0);
-    return (0, constant_js_2.allLeaveCalculationDecimalPlaces)(finalData);
+    return (0, constant_js_1.allLeaveCalculationDecimalPlaces)(finalData);
 };
 exports.getLeaveAccrualMultipleContracts = getLeaveAccrualMultipleContracts;
 const totalLeaveTakenMultipleContracts = (timeoffs, contracts, workingDays, rotationWorkedDays, startDate, endDate, leaveType, userId, filter = false) => {
@@ -623,10 +622,10 @@ const totalLeaveTakenMultipleContracts = (timeoffs, contracts, workingDays, rota
             : workingDays, userId, leaveType);
         return acc + finalLeave;
     }, 0);
-    return (0, constant_js_2.allLeaveCalculationDecimalPlaces)(totalLeave);
+    return (0, constant_js_1.allLeaveCalculationDecimalPlaces)(totalLeave);
 };
 exports.totalLeaveTakenMultipleContracts = totalLeaveTakenMultipleContracts;
-var constant_js_3 = require("./constant.cjs");
-Object.defineProperty(exports, "LEAVE_COUNT_TYPES", { enumerable: true, get: function () { return constant_js_3.LEAVE_COUNT_TYPES; } });
-Object.defineProperty(exports, "MONTHS_ARRAY", { enumerable: true, get: function () { return constant_js_3.MONTHS_ARRAY; } });
-Object.defineProperty(exports, "allLeaveCalculationDecimalPlaces", { enumerable: true, get: function () { return constant_js_3.allLeaveCalculationDecimalPlaces; } });
+var constant_js_2 = require("../contract/constant.cjs");
+Object.defineProperty(exports, "LEAVE_COUNT_TYPES", { enumerable: true, get: function () { return constant_js_2.LEAVE_COUNT_TYPES; } });
+Object.defineProperty(exports, "MONTHS_ARRAY", { enumerable: true, get: function () { return constant_js_2.MONTHS_ARRAY; } });
+Object.defineProperty(exports, "allLeaveCalculationDecimalPlaces", { enumerable: true, get: function () { return constant_js_2.allLeaveCalculationDecimalPlaces; } });

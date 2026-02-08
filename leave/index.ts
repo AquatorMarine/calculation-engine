@@ -7,13 +7,11 @@ import {
   LEAVE_CALCULATION_METHODS_CONSTANTS,
   CONTRACT_TYPES,
   CONTRACT_STATUS,
-} from "../contract/constant.js";
-import {
   MONTHS_ARRAY,
   LEAVE_COUNT_TYPES,
   EXCLUDED_LEAVE_TYPES,
   allLeaveCalculationDecimalPlaces,
-} from "./constant.js";
+} from "../contract/constant.js";
 import type {
   PayslipLike,
   TimeoffLike,
@@ -1023,4 +1021,4 @@ export const totalLeaveTakenMultipleContracts = (
   return allLeaveCalculationDecimalPlaces(totalLeave);
 };
 
-export { LEAVE_COUNT_TYPES, MONTHS_ARRAY, allLeaveCalculationDecimalPlaces } from "./constant.js";
+export { LEAVE_COUNT_TYPES, MONTHS_ARRAY, allLeaveCalculationDecimalPlaces } from "../contract/constant.js";

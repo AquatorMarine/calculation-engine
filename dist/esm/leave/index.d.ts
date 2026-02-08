@@ -1,5 +1,5 @@
 import { type Dayjs } from "dayjs";
-import { LEAVE_COUNT_TYPES } from "./constant.js";
+import { LEAVE_COUNT_TYPES } from "../contract/constant.js";
 import type { PayslipLike, TimeoffLike, ContractLike, PaySlipHistoryLike, WorkingDaysLike, ScheduleLike, AccrualSetsLike } from "./types.js";
 export declare const isAbleToGenerateLeaveForSelectedDateRange: (payslips: PayslipLike[] | undefined, leaveStartDate: string | Date | undefined, leaveEndDate: string | Date | undefined) => boolean;
 export declare const isThereAnyPendingLeaveBetweenSelectedPayslipDateRange: (timeoffs: TimeoffLike[] | undefined, startDate: string | Date | undefined, endDate: string | Date | undefined) => boolean;
@@ -70,5 +70,5 @@ export declare const totalLeaveTakenMultipleContracts: (timeoffs: TimeoffLike[] 
 } | null | undefined, rotationWorkedDays: {
     schedules?: ScheduleLike[];
 } | null | undefined, startDate: string | Date | undefined, endDate: string | Date | undefined, leaveType: string | undefined, userId: string | undefined, filter?: boolean) => number;
-export { LEAVE_COUNT_TYPES, MONTHS_ARRAY, allLeaveCalculationDecimalPlaces } from "./constant.js";
+export { LEAVE_COUNT_TYPES, MONTHS_ARRAY, allLeaveCalculationDecimalPlaces } from "../contract/constant.js";
 //# sourceMappingURL=index.d.ts.map

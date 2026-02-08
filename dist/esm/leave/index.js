@@ -3,8 +3,7 @@ import isBetween from "dayjs/plugin/isBetween";
 import minMax from "dayjs/plugin/minMax";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import { LEAVE_CALCULATION_METHODS_CONSTANTS, CONTRACT_TYPES, CONTRACT_STATUS, } from "../contract/constant.js";
-import { MONTHS_ARRAY, LEAVE_COUNT_TYPES, EXCLUDED_LEAVE_TYPES, allLeaveCalculationDecimalPlaces, } from "./constant.js";
+import { LEAVE_CALCULATION_METHODS_CONSTANTS, CONTRACT_TYPES, CONTRACT_STATUS, MONTHS_ARRAY, LEAVE_COUNT_TYPES, EXCLUDED_LEAVE_TYPES, allLeaveCalculationDecimalPlaces, } from "../contract/constant.js";
 dayjs.extend(isBetween);
 dayjs.extend(minMax);
 dayjs.extend(isSameOrBefore);
@@ -596,4 +595,4 @@ export const totalLeaveTakenMultipleContracts = (timeoffs, contracts, workingDay
     }, 0);
     return allLeaveCalculationDecimalPlaces(totalLeave);
 };
-export { LEAVE_COUNT_TYPES, MONTHS_ARRAY, allLeaveCalculationDecimalPlaces } from "./constant.js";
+export { LEAVE_COUNT_TYPES, MONTHS_ARRAY, allLeaveCalculationDecimalPlaces } from "../contract/constant.js";
