@@ -69,9 +69,9 @@ exports.deriveAccrualSets = deriveAccrualSets;
 const getEffectiveContracts = (contracts, payslipStart, payslipEnd) => {
     if (!Array.isArray(contracts) || !payslipStart || !payslipEnd)
         return [];
-    const pStart = (0, dayjs_1.default)(payslipStart).startOf("day");
-    const pEnd = (0, dayjs_1.default)(payslipEnd).endOf("day");
-    if (!pStart.isValid() || !pEnd.isValid() || pEnd.isBefore(pStart))
+    const pStart = (0, dayjs_1.default)(payslipStart);
+    const pEnd = (0, dayjs_1.default)(payslipEnd);
+    if (!pStart.isValid() || !pEnd.isValid() || pEnd.isBefore(pStart, "day"))
         return [];
     const effective = [];
     for (const contract of contracts) {
@@ -85,16 +85,16 @@ const getEffectiveContracts = (contracts, payslipStart, payslipEnd) => {
             : pEnd;
         if (!end.isValid())
             continue;
-        if (end.isBefore(start))
+        if (end.isBefore(start, "day"))
             continue;
-        if (start.isSameOrBefore(pEnd) && end.isSameOrAfter(pStart)) {
+        if (start.isSameOrBefore(pEnd, "day") && end.isSameOrAfter(pStart, "day")) {
             effective.push({
                 ...contract,
                 effectiveFrom: dayjs_1.default.max(start, pStart).toISOString(),
                 effectiveTo: dayjs_1.default.min(end, pEnd).toISOString(),
             });
         }
-        if (start.isBefore(pStart))
+        if (start.isBefore(pStart, "day"))
             break;
     }
     return effective.reverse();
@@ -118,14 +118,14 @@ const getSegmentDateRange = (contract, index, allContracts, payslipRange, dateRe
         : null;
     let startDate = null;
     if (payslipStart && hiredAt) {
-        startDate = payslipStart.isAfter(hiredAt) ? payslipStart : hiredAt;
+        startDate = payslipStart.isAfter(hiredAt, "day") ? payslipStart : hiredAt;
     }
     else {
         startDate = payslipStart || hiredAt;
     }
     let endDate = null;
     if (payslipEnd && nextHiredAt) {
-        endDate = payslipEnd.isBefore(nextHiredAt)
+        endDate = payslipEnd.isBefore(nextHiredAt, "day")
             ? payslipEnd
             : nextHiredAt.subtract(1, "day");
     }
@@ -172,7 +172,7 @@ const getActiveContractAtSpecificDate = (contracts, date) => {
         (0, dayjs_1.default)(a.contractEffectiveDate || a.hiredAt).valueOf())[0];
     if (latestContract.contractExpiryDate) {
         const expiry = (0, dayjs_1.default)(latestContract.contractExpiryDate).endOf("day");
-        if (target.isAfter(expiry)) {
+        if (target.isAfter(expiry, "day")) {
             return null;
         }
     }
@@ -237,7 +237,7 @@ const getLeaveRenewalDateWithYear = (leaveRenewalDate, toDate = false, today = (
     const renewalMonth = renewalDate.month();
     const renewalDay = renewalDate.date();
     const renewalThisYear = today.month(renewalMonth).date(renewalDay);
-    const finalDate = today.isBefore(renewalThisYear)
+    const finalDate = today.isBefore(renewalThisYear, "day")
         ? renewalThisYear
         : renewalThisYear.add(1, "year");
     return toDate ? finalDate.toDate() : finalDate;
@@ -258,15 +258,15 @@ const leaveAccrualStartDate = (activeContract) => {
     const leaveRenewalDate = (0, exports.getLeaveRenewalDateWithYear)(leaveRenewalDateRaw, false, today);
     const convertToDayJs = (0, dayjs_1.default)(leaveRenewalDate);
     const removeOneYearFromLeaveRenewalDate = convertToDayJs.subtract(1, "year");
-    const compareDateWithHireDate = removeOneYearFromLeaveRenewalDate.isAfter(contractEffectiveDate || hiredAt);
-    const hiredDate = today.isBefore(leaveRenewalDate)
+    const compareDateWithHireDate = removeOneYearFromLeaveRenewalDate.isAfter(contractEffectiveDate || hiredAt, "day");
+    const hiredDate = today.isBefore(leaveRenewalDate, "day")
         ? compareDateWithHireDate
             ? removeOneYearFromLeaveRenewalDate
             : contractEffectiveDate || hiredAt
         : leaveRenewalDate;
     let finalDate = (0, dayjs_1.default)(hiredDate);
     if (segmentStart) {
-        finalDate = (0, dayjs_1.default)(hiredDate).isAfter(segmentStart)
+        finalDate = (0, dayjs_1.default)(hiredDate).isAfter(segmentStart, "day")
             ? (0, dayjs_1.default)(hiredDate)
             : segmentStart;
     }
@@ -280,14 +280,14 @@ const leaveAccrualEndDate = (timeoffs) => {
     for (const timeoff of timeoffs) {
         if (timeoff?.endDate) {
             const current = (0, dayjs_1.default)(timeoff.endDate);
-            if (!maxEndDate || current.isAfter(maxEndDate)) {
+            if (!maxEndDate || current.isAfter(maxEndDate, "day")) {
                 maxEndDate = current;
             }
         }
     }
     const currentEndDate = (0, dayjs_1.default)();
     return maxEndDate
-        ? currentEndDate.isAfter(maxEndDate)
+        ? currentEndDate.isAfter(maxEndDate, "day")
             ? currentEndDate.toDate()
             : maxEndDate.toDate()
         : null;
@@ -299,7 +299,7 @@ const calculateWorkingDaysBetweenDatesForDaysWorked = (entitlement, startDate, e
     if (!workingDays?.length ||
         !start.isValid() ||
         !end.isValid() ||
-        start.isAfter(end)) {
+        start.isAfter(end, "day")) {
         return 0;
     }
     const workingDaysMap = new Map(workingDays?.map((wd) => [wd.year, wd.workingDays || {}]));
@@ -375,8 +375,7 @@ const calculateLeaveWithAccruableCommon = (timeoffs, activeContract, leaveType, 
         if (isApproved && isTargetType && finalCheck) {
             let currentDay = (0, dayjs_1.default)(leave.startDate);
             const leaveEndDate = (0, dayjs_1.default)(leave.endDate);
-            while (currentDay.isBefore(leaveEndDate) ||
-                currentDay.isSame(leaveEndDate, "day")) {
+            while (currentDay.isSameOrBefore(leaveEndDate, "day")) {
                 const inWindow = currentDay.isBetween(globalStart, globalEnd, "day", "[]");
                 if (inWindow) {
                     const isTravelDay = leave.travelDays?.some((travel) => {
@@ -431,7 +430,7 @@ const getDutyDays = (records, fromDate, toDate, type, excludeTravel = false) => 
         }
         const overlapStart = dayjs_1.default.max(rotationStart, start);
         const overlapEnd = dayjs_1.default.min(rotationEnd, end);
-        if (overlapStart.isSameOrBefore(overlapEnd)) {
+        if (overlapStart.isSameOrBefore(overlapEnd, "day")) {
             let diffDays = overlapEnd.diff(overlapStart, "day") + 1;
             if (excludeTravel && rec?.travelDays?.length) {
                 let travelDaysCount = 0;
