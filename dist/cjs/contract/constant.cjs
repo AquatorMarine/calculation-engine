@@ -12,7 +12,7 @@ exports.LEAVE_CALCULATION_METHODS_CONSTANTS = {
     DAYS_ACCRUED_30DAYS: "daysAccrued30days",
     DAYS_ACCRUED_31DAYS: "daysAccrued31days",
     DAYS_ACCRUED_12_365DAYS: "daysAccrued12365days",
-    // DAYS_ACCRUED_DAYS_WORKED: "daysAccruedDaysWorked",
+    DAYS_ACCRUED_DAYS_WORKED: "daysAccruedDaysWorked",
     DAYS_ACCRUED_DAYS_WORKED_BASED_ON_ROTATION: "daysAccruedDaysWorkedBasedOnRotation",
 };
 exports.SALARY_CALCULATION_METHODS_CONSTANTS = {

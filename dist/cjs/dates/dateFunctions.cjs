@@ -19,6 +19,8 @@ const covertDateIntoTimestamp = (date) => {
 };
 exports.covertDateIntoTimestamp = covertDateIntoTimestamp;
 const isFutureDateUTC = (date) => {
+    if (!date)
+        return false;
     const convertedDate = (0, exports.covertDateIntoTimestamp)(date);
     const currentDate = (0, exports.covertDateIntoTimestamp)();
     return convertedDate > currentDate;

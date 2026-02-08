@@ -35,6 +35,11 @@
       "types": "./dist/esm/dates/index.d.ts",
       "import": "./dist/esm/dates/index.js",
       "require": "./dist/cjs/dates/index.cjs"
+    },
+    "./leave": {
+      "types": "./dist/esm/leave/index.d.ts",
+      "import": "./dist/esm/leave/index.js",
+      "require": "./dist/cjs/leave/index.cjs"
     }
   },
   "files": [

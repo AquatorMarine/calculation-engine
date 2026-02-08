@@ -15,6 +15,7 @@ export const covertDateIntoTimestamp = (date?: string): number => {
 };
 
 export const isFutureDateUTC = (date: string): boolean => {
+  if (!date) return false;
   const convertedDate = covertDateIntoTimestamp(date);
   const currentDate = covertDateIntoTimestamp();
   return convertedDate > currentDate;
