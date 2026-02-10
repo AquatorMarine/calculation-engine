@@ -1,5 +1,5 @@
 {
-  "name": "@aquatormarine/calculation-engine",
+"name": "@aquatormarine/calculation-engine",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/cjs/index.cjs",

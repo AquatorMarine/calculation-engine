@@ -587,7 +587,8 @@ const getDutyDays = (
   fromDate: string | Date | Dayjs,
   toDate: string | Date | Dayjs,
   type: string,
-  excludeTravel = false
+  excludeTravel = false,
+  leaveCountType: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES] = LEAVE_COUNT_TYPES.TOTAL
 ): number => {
   const start = dayjs(fromDate);
   const end = dayjs(toDate);
@@ -656,7 +657,8 @@ const calculateRotationDays = (
   endDate: string | Date | Dayjs,
   workingDays: { schedules?: ScheduleLike[] } | null | undefined,
   userId: string | undefined,
-  dutyType = "OnDuty"
+  dutyType = "OnDuty",
+  leaveCountType: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES] = LEAVE_COUNT_TYPES.TOTAL
 ): number => {
   const userSchedules = workingDays?.schedules?.filter(
     (schedule) => schedule.userId === userId
@@ -669,7 +671,8 @@ const calculateRotationDays = (
     startDate,
     endDate,
     dutyType,
-    true
+    true,
+    leaveCountType
   );
 
   return +entitlement * totalDays;
@@ -834,11 +837,12 @@ export const totalLeaveTakenFromHireDateNew = (
       globalEnd,
       rotationWorkingDays,
       userId,
-      "OffDuty"
+      "OffDuty",
+      leaveCountType
     );
   }
 
-  return totalLeaveCount + rotationDays || 0;
+  return typeof totalLeaveCount === "string" || typeof totalLeaveCount === "number" ? totalLeaveCount + rotationDays : totalLeaveCount || 0;
 };
 
 export const calculateLeaveNew = (
