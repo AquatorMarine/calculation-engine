@@ -582,18 +582,28 @@ export const calculateLeaveWithAccruableCommon = (
   return totalLeaveCount;
 };
 
-const getDutyDays = (
+export const getDutyDays = (
   records: ScheduleLike[],
   fromDate: string | Date | Dayjs,
   toDate: string | Date | Dayjs,
   type: string,
   excludeTravel = false,
   leaveCountType: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES] = LEAVE_COUNT_TYPES.TOTAL
-): number => {
+): number | { x: string; y: number }[] => {
   const start = dayjs(fromDate);
   const end = dayjs(toDate);
 
-  if (!Array.isArray(records) || records.length === 0) return 0;
+  const monthWiseCounts = MONTHS_ARRAY.map((month) => ({
+    x: month,
+    y: 0,
+  }));
+
+  if (!Array.isArray(records) || records.length === 0) {
+    return leaveCountType === LEAVE_COUNT_TYPES.MONTHLY
+      ? monthWiseCounts
+      : 0;
+  }
+
   const sortedRecords = records
     .slice()
     .sort((a, b) => dayjs(a.startDate).diff(dayjs(b.startDate)));
@@ -602,9 +612,11 @@ const getDutyDays = (
     if (rec.type !== type) return total;
 
     const rotationStart = dayjs(rec.startDate);
-    let rotationEnd = rec.endDate ? dayjs(rec.endDate) : end.clone();
+    let rotationEnd = rec.endDate
+      ? dayjs(rec.endDate)
+      : dayjs(); // use today if no endDate
 
-    const nextRec = records[idx + 1];
+    const nextRec = sortedRecords[idx + 1];
     if (
       nextRec &&
       nextRec.startDate &&
@@ -616,38 +628,61 @@ const getDutyDays = (
 
     const overlapStart = dayjs.max(rotationStart, start);
     const overlapEnd = dayjs.min(rotationEnd, end);
+
     if (overlapStart.isSameOrBefore(overlapEnd, "day")) {
-      let diffDays = overlapEnd.diff(overlapStart, "day") + 1;
-      if (excludeTravel && rec?.travelDays?.length) {
-        let travelDaysCount = 0;
-        let currentDay = overlapStart.clone();
-        const travelDaysArr = rec.travelDays;
-        const firstPair =
-          Array.isArray(travelDaysArr) && travelDaysArr.length > 0
-            ? travelDaysArr[0]
-            : undefined;
-        const tStart =
-          firstPair && Array.isArray(firstPair) && firstPair.length >= 2
-            ? firstPair[0]
-            : undefined;
-        const tEnd =
-          firstPair && Array.isArray(firstPair) && firstPair.length >= 2
-            ? firstPair[1]
-            : undefined;
-        while (currentDay.isSameOrBefore(overlapEnd, "day")) {
-          const isTravelDay =
-            tStart != null &&
-            tEnd != null &&
-            currentDay.isBetween(dayjs(tStart), dayjs(tEnd), "day", "[]");
-          if (isTravelDay) travelDaysCount++;
-          currentDay = currentDay.add(1, "day");
+      let currentDay = overlapStart;
+      let diffDays = 0;
+
+      const travelDaysArr = rec.travelDays;
+      const firstPair =
+        Array.isArray(travelDaysArr) && travelDaysArr.length > 0
+          ? travelDaysArr[0]
+          : undefined;
+
+      const tStart =
+        firstPair && Array.isArray(firstPair) && firstPair.length >= 2
+          ? firstPair[0]
+          : undefined;
+
+      const tEnd =
+        firstPair && Array.isArray(firstPair) && firstPair.length >= 2
+          ? firstPair[1]
+          : undefined;
+
+      while (currentDay.isSameOrBefore(overlapEnd, "day")) {
+        let isTravelDay = false;
+
+        if (excludeTravel && tStart && tEnd) {
+          isTravelDay = currentDay.isBetween(
+            dayjs(tStart),
+            dayjs(tEnd),
+            "day",
+            "[]"
+          );
         }
-        diffDays = Math.max(0, diffDays - travelDaysCount);
+
+        if (!isTravelDay) {
+          diffDays++;
+
+          if (leaveCountType === LEAVE_COUNT_TYPES.MONTHLY) {
+            const monthIndex = currentDay.month();
+            monthWiseCounts[monthIndex].y++;
+          }
+        }
+
+        currentDay = currentDay.add(1, "day");
       }
+
       return total + diffDays;
     }
+
     return total;
   }, 0);
+
+  if (leaveCountType === LEAVE_COUNT_TYPES.MONTHLY) {
+    return monthWiseCounts;
+  }
+
   return totalDutyDays;
 };
 
@@ -659,11 +694,14 @@ const calculateRotationDays = (
   userId: string | undefined,
   dutyType = "OnDuty",
   leaveCountType: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES] = LEAVE_COUNT_TYPES.TOTAL
-): number => {
+): number | Array<{ x: string; y: number }> => {
   const userSchedules = workingDays?.schedules?.filter(
     (schedule) => schedule.userId === userId
   );
   if (!userSchedules?.length) {
+    if (leaveCountType === LEAVE_COUNT_TYPES.MONTHLY) {
+      return MONTHS_ARRAY.map((month) => ({ x: month, y: 0 }));
+    }
     return 0;
   }
   const totalDays = getDutyDays(
@@ -675,7 +713,12 @@ const calculateRotationDays = (
     leaveCountType
   );
 
-  return +entitlement * totalDays;
+  return Array.isArray(totalDays)
+    ? totalDays.map((data) => ({
+      x: data.x,
+      y: allLeaveCalculationDecimalPlaces(Number(data.y) * Number(entitlement)),
+    }))
+    : Number(totalDays) * Number(entitlement);
 };
 
 export const getDailyAccruedLeaveNew = (
@@ -750,7 +793,7 @@ export const getLeaveAccrualNew = (
       endDate ?? "",
       !Array.isArray(workingDays) ? workingDays : null,
       userId
-    );
+    ) as number;
   } else if (
     method === LEAVE_CALCULATION_METHODS_CONSTANTS.LEAVE_ENTITLEMENT_LEAVE_TAKEN
   ) {
@@ -803,8 +846,7 @@ export const totalLeaveTakenFromHireDateNew = (
   userId: string | undefined,
   leaveType?: string | undefined,
   leaveCountType: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES] = LEAVE_COUNT_TYPES.TOTAL
-): number => {
-  if (!timeoffs?.length) return 0;
+): number | Array<{ x: string; y: number }> => {
 
   const globalStart = startDatem
     ? dayjs(startDatem)
@@ -814,23 +856,28 @@ export const totalLeaveTakenFromHireDateNew = (
     ? dayjs(endDatem)
     : dayjs(leaveAccrualEndDate(timeoffs));
 
-  const totalLeaveCount = calculateLeaveWithAccruableCommon(
-    timeoffs,
-    activeContract,
-    leaveType,
-    false,
-    globalStart,
-    globalEnd,
-    leaveCountType
-  ) as number;
+  let totalLeaveCount = 0;
+  if (timeoffs?.length) {
+    totalLeaveCount = calculateLeaveWithAccruableCommon(
+      timeoffs,
+      activeContract,
+      leaveType,
+      false,
+      globalStart,
+      globalEnd,
+      leaveCountType
+    ) as number;
+  }
 
-  let rotationDays = 0;
+  let rotationDays: any = 0;
   if (
     activeContract?.contractType === CONTRACT_TYPES.ROTATION &&
     !leaveType
   ) {
+
     const rotationWorkingDays =
       workingDays && !Array.isArray(workingDays) ? workingDays : null;
+
     rotationDays = calculateRotationDays(
       1,
       globalStart,
@@ -840,6 +887,15 @@ export const totalLeaveTakenFromHireDateNew = (
       "OffDuty",
       leaveCountType
     );
+  }
+
+  if (leaveCountType === LEAVE_COUNT_TYPES.MONTHLY) {
+    const leaveMonthly = totalLeaveCount as unknown as Array<{ x: string; y: number }>;
+    const rotationMonthly = rotationDays as unknown as Array<{ x: string; y: number }>;
+    return leaveMonthly.map((item, idx) => ({
+      x: item.x,
+      y: item.y + (rotationMonthly[idx]?.y || 0),
+    }));
   }
 
   return typeof totalLeaveCount === "string" || typeof totalLeaveCount === "number" ? totalLeaveCount + rotationDays : totalLeaveCount || 0;
@@ -896,7 +952,7 @@ export const calculateLeaveNew = (
     userId,
     undefined,
     LEAVE_COUNT_TYPES.TOTAL
-  );
+  ) as number;
 
   const nonAccrualLeave = calculateNonAccruableLeave(
     timeoffs,
@@ -1016,7 +1072,7 @@ export const totalLeaveTakenMultipleContracts = (
         : workingDays,
       userId,
       leaveType
-    );
+    ) as number;
     return acc + finalLeave;
   }, 0);
 
