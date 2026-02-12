@@ -49,6 +49,10 @@ export declare const calculateLeaveWithAccruableCommon: (timeoffs: TimeoffLike[]
     x: string;
     y: number;
 }>;
+export declare const getDutyDays: (records: ScheduleLike[], fromDate: string | Date | Dayjs, toDate: string | Date | Dayjs, type: string, excludeTravel?: boolean, leaveCountType?: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES]) => number | {
+    x: string;
+    y: number;
+}[];
 export declare const getDailyAccruedLeaveNew: (method: string | undefined, enti: number | undefined, daysDiff?: number) => number;
 export declare const getLeaveAccrualNew: (method: string | undefined, entitlement: number | undefined, startDate: string | Date | undefined, endDate: string | Date | undefined, workingDays: WorkingDaysLike[] | {
     schedules?: ScheduleLike[];
@@ -56,7 +60,10 @@ export declare const getLeaveAccrualNew: (method: string | undefined, entitlemen
 export declare const calculateNonAccruableLeave: (timeoffs: TimeoffLike[] | null | undefined, activeContract: ContractLike | null | undefined, leaveType: string | undefined, accrualSets: AccrualSetsLike | null | undefined) => number;
 export declare const totalLeaveTakenFromHireDateNew: (timeoffs: TimeoffLike[] | null | undefined, activeContract: ContractLike | null | undefined, startDatem: string | Date | Dayjs | undefined, endDatem: string | Date | Dayjs | undefined, workingDays: WorkingDaysLike[] | {
     schedules?: ScheduleLike[];
-} | null | undefined, userId: string | undefined, leaveType?: string | undefined, leaveCountType?: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES]) => number;
+} | null | undefined, userId: string | undefined, leaveType?: string | undefined, leaveCountType?: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES]) => number | Array<{
+    x: string;
+    y: number;
+}>;
 export declare const calculateLeaveNew: (paySlipHistory: PaySlipHistoryLike[] | null | undefined, timeoffs: TimeoffLike[] | null | undefined, activeContract: ContractLike | null | undefined, workingDays: WorkingDaysLike[] | {
     schedules?: ScheduleLike[];
 } | null | undefined, rotationWorkedDays: {
