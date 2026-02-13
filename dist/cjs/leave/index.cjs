@@ -353,7 +353,6 @@ const getFilterdContractWithStartDateAndEndDate = (contracts, startDate, endDate
 };
 exports.getFilterdContractWithStartDateAndEndDate = getFilterdContractWithStartDateAndEndDate;
 const calculateLeaveWithAccruableCommon = (timeoffs, activeContract, leaveType, nonAccruableLeaves = false, startDatem, endDatem, leaveCountType = constant_js_1.LEAVE_COUNT_TYPES.TOTAL) => {
-    console.log("leaveCountType ---------------------- ", leaveCountType);
     const globalStart = startDatem
         ? (0, dayjs_1.default)(startDatem)
         : (0, dayjs_1.default)((0, exports.leaveAccrualStartDate)(activeContract));
@@ -412,8 +411,6 @@ exports.calculateLeaveWithAccruableCommon = calculateLeaveWithAccruableCommon;
 const getDutyDays = (records, fromDate, toDate, type, excludeTravel = false, leaveCountType = constant_js_1.LEAVE_COUNT_TYPES.TOTAL) => {
     const start = (0, dayjs_1.default)(fromDate);
     const end = (0, dayjs_1.default)(toDate);
-    console.log("start ---------------------- ", start);
-    console.log("end ---------------------- ", end);
     const monthWiseCounts = constant_js_1.MONTHS_ARRAY.map((month) => ({
         x: month,
         y: 0,
@@ -579,14 +576,12 @@ const totalLeaveTakenFromHireDateNew = (timeoffs, activeContract, startDatem, en
     }
     if (leaveCountType === constant_js_1.LEAVE_COUNT_TYPES.TYPEWISE) {
         return Object.keys(totalLeaveCount).length > 0
-            ? { ...totalLeaveCount, Rotation: rotationDays }
+            ? { ...totalLeaveCount, Rotation: totalLeaveCount.Rotation ? totalLeaveCount.Rotation + rotationDays : rotationDays }
             : { Rotation: rotationDays };
     }
     if (leaveCountType === constant_js_1.LEAVE_COUNT_TYPES.MONTHLY) {
         const leaveMonthly = totalLeaveCount;
         const rotationMonthly = rotationDays;
-        console.log("leaveMonthly ---------------------- ", leaveMonthly);
-        console.log("rotationMonthly ---------------------- ", rotationMonthly);
         if (!leaveMonthly?.length || !rotationMonthly?.length)
             return Array.isArray(rotationMonthly) ? rotationMonthly : [];
         return leaveMonthly?.map((item, idx) => ({
@@ -594,7 +589,8 @@ const totalLeaveTakenFromHireDateNew = (timeoffs, activeContract, startDatem, en
             y: item.y + (rotationMonthly[idx]?.y || 0),
         }));
     }
-    return typeof totalLeaveCount === "string" || typeof totalLeaveCount === "number" ? totalLeaveCount + rotationDays : totalLeaveCount || 0;
+    const finalResult = typeof totalLeaveCount === "string" || typeof totalLeaveCount === "number" ? totalLeaveCount + rotationDays : totalLeaveCount || 0;
+    return finalResult;
 };
 exports.totalLeaveTakenFromHireDateNew = totalLeaveTakenFromHireDateNew;
 const calculateLeaveNew = (paySlipHistory, timeoffs, activeContract, workingDays, rotationWorkedDays, userId, startDate, endDate, accrualSets) => {
