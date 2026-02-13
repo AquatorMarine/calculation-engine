@@ -391,7 +391,7 @@ export const leaveAccrualStartDate = (
 export const leaveAccrualEndDate = (
   timeoffs: TimeoffLike[] | null | undefined
 ): Date | null => {
-  if (!timeoffs?.length) return null;
+  if (!timeoffs?.length) return dayjs().toDate();
 
   let maxEndDate: Dayjs | null = null;
 
@@ -511,6 +511,7 @@ export const calculateLeaveWithAccruableCommon = (
   endDatem: string | Date | Dayjs | undefined,
   leaveCountType: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES] = LEAVE_COUNT_TYPES.TOTAL
 ): number | Record<string, number> | Array<{ x: string; y: number }> => {
+
   const globalStart = startDatem
     ? dayjs(startDatem)
     : dayjs(leaveAccrualStartDate(activeContract));
@@ -856,7 +857,7 @@ export const totalLeaveTakenFromHireDateNew = (
     ? dayjs(endDatem)
     : dayjs(leaveAccrualEndDate(timeoffs));
 
-  let totalLeaveCount = 0;
+  let totalLeaveCount: any = 0;
   if (timeoffs?.length) {
     totalLeaveCount = calculateLeaveWithAccruableCommon(
       timeoffs,
@@ -889,10 +890,17 @@ export const totalLeaveTakenFromHireDateNew = (
     );
   }
 
+  if (leaveCountType === LEAVE_COUNT_TYPES.TYPEWISE) {
+    return Object.keys(totalLeaveCount).length > 0
+      ? { ...totalLeaveCount, Rotation: totalLeaveCount.Rotation ? totalLeaveCount.Rotation + rotationDays : rotationDays }
+      : { Rotation: rotationDays } as any;
+  }
+
   if (leaveCountType === LEAVE_COUNT_TYPES.MONTHLY) {
     const leaveMonthly = totalLeaveCount as unknown as Array<{ x: string; y: number }>;
     const rotationMonthly = rotationDays as unknown as Array<{ x: string; y: number }>;
-    return leaveMonthly.map((item, idx) => ({
+    if (!leaveMonthly?.length || !rotationMonthly?.length) return Array.isArray(rotationMonthly) ? rotationMonthly : [];
+    return leaveMonthly?.map((item, idx) => ({
       x: item.x,
       y: item.y + (rotationMonthly[idx]?.y || 0),
     }));
