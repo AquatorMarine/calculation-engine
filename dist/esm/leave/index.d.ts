@@ -49,6 +49,7 @@ export declare const calculateLeaveWithAccruableCommon: (timeoffs: TimeoffLike[]
     x: string;
     y: number;
 }>;
+export declare const getAllTravelDays: (data: any[]) => string[];
 export declare const getDutyDays: (records: ScheduleLike[], fromDate: string | Date | Dayjs, toDate: string | Date | Dayjs, type: string, excludeTravel?: boolean, leaveCountType?: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES]) => number | {
     x: string;
     y: number;
@@ -63,7 +64,7 @@ export declare const totalLeaveTakenFromHireDateNew: (timeoffs: TimeoffLike[] | 
 } | null | undefined, userId: string | undefined, leaveType?: string | undefined, leaveCountType?: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES]) => number | Array<{
     x: string;
     y: number;
-}>;
+}> | Record<string, number>;
 export declare const calculateLeaveNew: (paySlipHistory: PaySlipHistoryLike[] | null | undefined, timeoffs: TimeoffLike[] | null | undefined, activeContract: ContractLike | null | undefined, workingDays: WorkingDaysLike[] | {
     schedules?: ScheduleLike[];
 } | null | undefined, rotationWorkedDays: {

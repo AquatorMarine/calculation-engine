@@ -583,6 +583,28 @@ export const calculateLeaveWithAccruableCommon = (
   return totalLeaveCount;
 };
 
+export const getAllTravelDays = (data: any[]): string[] => {
+  const result: string[] = [];
+
+  data.forEach((item) => {
+    if (!item.travelDays || !Array.isArray(item.travelDays)) return;
+    const [start, end] = item.travelDays;
+    if (!start || !end) return;
+    let current = dayjs(start);
+    const last = dayjs(end);
+
+    while (current.isSameOrBefore(last, "day")) {
+      result.push(current.format("YYYY-MM-DD"));
+      current = current.add(1, "day");
+    }
+  });
+
+
+  // remove duplicates + sort
+  return [...new Set(result)].sort();
+};
+
+
 export const getDutyDays = (
   records: ScheduleLike[],
   fromDate: string | Date | Dayjs,
@@ -609,23 +631,15 @@ export const getDutyDays = (
     .slice()
     .sort((a, b) => dayjs(a.startDate).diff(dayjs(b.startDate)));
 
+  const travelDays = getAllTravelDays(sortedRecords);
   const totalDutyDays = sortedRecords.reduce((total, rec, idx) => {
     if (rec.type !== type) return total;
 
     const rotationStart = dayjs(rec.startDate);
-    let rotationEnd = rec.endDate
+    const rotationEnd = rec.endDate
       ? dayjs(rec.endDate)
       : dayjs(); // use today if no endDate
 
-    const nextRec = sortedRecords[idx + 1];
-    if (
-      nextRec &&
-      nextRec.startDate &&
-      rec.endDate &&
-      dayjs(nextRec.startDate).isSame(rotationEnd, "day")
-    ) {
-      rotationEnd = rotationEnd.subtract(1, "day");
-    }
 
     const overlapStart = dayjs.max(rotationStart, start);
     const overlapEnd = dayjs.min(rotationEnd, end);
@@ -634,32 +648,12 @@ export const getDutyDays = (
       let currentDay = overlapStart;
       let diffDays = 0;
 
-      const travelDaysArr = rec.travelDays;
-      const firstPair =
-        Array.isArray(travelDaysArr) && travelDaysArr.length > 0
-          ? travelDaysArr[0]
-          : undefined;
-
-      const tStart =
-        firstPair && Array.isArray(firstPair) && firstPair.length >= 2
-          ? firstPair[0]
-          : undefined;
-
-      const tEnd =
-        firstPair && Array.isArray(firstPair) && firstPair.length >= 2
-          ? firstPair[1]
-          : undefined;
 
       while (currentDay.isSameOrBefore(overlapEnd, "day")) {
         let isTravelDay = false;
 
-        if (excludeTravel && tStart && tEnd) {
-          isTravelDay = currentDay.isBetween(
-            dayjs(tStart),
-            dayjs(tEnd),
-            "day",
-            "[]"
-          );
+        if (excludeTravel) {
+          isTravelDay = travelDays.includes(currentDay.format("YYYY-MM-DD"));
         }
 
         if (!isTravelDay) {
@@ -847,7 +841,7 @@ export const totalLeaveTakenFromHireDateNew = (
   userId: string | undefined,
   leaveType?: string | undefined,
   leaveCountType: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES] = LEAVE_COUNT_TYPES.TOTAL
-): number | Array<{ x: string; y: number }> => {
+): number | Array<{ x: string; y: number }> | Record<string, number> => {
 
   const globalStart = startDatem
     ? dayjs(startDatem)
@@ -891,10 +885,17 @@ export const totalLeaveTakenFromHireDateNew = (
   }
 
   if (leaveCountType === LEAVE_COUNT_TYPES.TYPEWISE) {
+    const rotationTotal = (totalLeaveCount.Rotation || 0) + rotationDays;
+
     return Object.keys(totalLeaveCount).length > 0
-      ? { ...totalLeaveCount, Rotation: totalLeaveCount.Rotation ? totalLeaveCount.Rotation + rotationDays : rotationDays }
-      : { Rotation: rotationDays } as any;
-  }
+      ? {
+          ...totalLeaveCount,
+          ...(rotationTotal > 0 ? { Rotation: rotationTotal } : {})
+        }
+      : rotationTotal > 0
+        ? { Rotation: rotationTotal }
+        : {};
+      }
 
   if (leaveCountType === LEAVE_COUNT_TYPES.MONTHLY) {
     const leaveMonthly = totalLeaveCount as unknown as Array<{ x: string; y: number }>;
