@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allLeaveCalculationDecimalPlaces = exports.MONTHS_ARRAY = exports.LEAVE_COUNT_TYPES = exports.totalLeaveTakenMultipleContracts = exports.getLeaveAccrualMultipleContracts = exports.calculateLeaveNew = exports.totalLeaveTakenFromHireDateNew = exports.calculateNonAccruableLeave = exports.getLeaveAccrualNew = exports.getDailyAccruedLeaveNew = exports.getDutyDays = exports.getAllTravelDays = exports.calculateLeaveWithAccruableCommon = exports.getFilterdContractWithStartDateAndEndDate = exports.calculateWorkingDaysBetweenDatesForDaysWorked = exports.leaveAccrualEndDate = exports.leaveAccrualStartDate = exports.getLeaveRenewalDateWithYear = exports.leaveCarriedOverFromPreviousYearFunction = exports.getMaxWorkingDaysForMonth = exports.getActiveContractAtSpecificDate = exports.getPayslipLeaveAdjustments = exports.getSegmentDateRange = exports.finalEffectiveDateFromContracts = exports.contractToConsiderForLeaveCalculation = exports.getEffectiveContracts = exports.deriveAccrualSets = exports.isThereAnyPendingLeaveBetweenSelectedPayslipDateRange = exports.isAbleToGenerateLeaveForSelectedDateRange = void 0;
+exports.allLeaveCalculationDecimalPlaces = exports.MONTHS_ARRAY = exports.LEAVE_COUNT_TYPES = exports.totalLeaveTakenMultipleContracts = exports.getLeaveAccrualMultipleContracts = exports.calculateLeaveNew = exports.totalLeaveTakenFromHireDateNew = exports.calculateNonAccruableLeave = exports.getLeaveAccrualNew = exports.getDailyAccruedLeaveNew = exports.calculateRotationDays = exports.getDutyDays = exports.getAllTravelDays = exports.calculateLeaveWithAccruableCommon = exports.getFilterdContractWithStartDateAndEndDate = exports.calculateWorkingDaysBetweenDatesForDaysWorked = exports.leaveAccrualEndDate = exports.leaveAccrualStartDate = exports.getLeaveRenewalDateWithYear = exports.leaveCarriedOverFromPreviousYearFunction = exports.getMaxWorkingDaysForMonth = exports.getActiveContractAtSpecificDate = exports.getPayslipLeaveAdjustments = exports.getSegmentDateRange = exports.finalEffectiveDateFromContracts = exports.contractToConsiderForLeaveCalculation = exports.getEffectiveContracts = exports.deriveAccrualSets = exports.isThereAnyPendingLeaveBetweenSelectedPayslipDateRange = exports.isAbleToGenerateLeaveForSelectedDateRange = void 0;
 const dayjs_1 = __importDefault(require("dayjs"));
 const isBetween_1 = __importDefault(require("dayjs/plugin/isBetween"));
 const minMax_1 = __importDefault(require("dayjs/plugin/minMax"));
@@ -109,7 +109,7 @@ const finalEffectiveDateFromContracts = (seaContracts, dateRange) => {
 };
 exports.finalEffectiveDateFromContracts = finalEffectiveDateFromContracts;
 const getSegmentDateRange = (contract, index, allContracts, payslipRange, dateReturn = false, formatDate = defaultFormatDate) => {
-    const format = (d) => dateReturn ? d.toDate() : formatDate(d.toDate());
+    const format = (d) => dateReturn ? d.format("YYYY-MM-DD") : formatDate(d.toDate());
     const payslipStart = payslipRange?.[0] ? (0, dayjs_1.default)(payslipRange[0]) : null;
     const payslipEnd = payslipRange?.[1] ? (0, dayjs_1.default)(payslipRange[1]) : null;
     const hiredAt = contract?.hiredAt ? (0, dayjs_1.default)(contract.hiredAt) : null;
@@ -462,7 +462,6 @@ const getDutyDays = (records, fromDate, toDate, type, excludeTravel = false, lea
         .slice()
         .sort((a, b) => (0, dayjs_1.default)(a.startDate).diff((0, dayjs_1.default)(b.startDate)));
     const sortedRecords = adjustEndDates(record);
-    console.log("sortedRecords before get all travel days", sortedRecords);
     const travelDays = (0, exports.getAllTravelDays)(sortedRecords);
     const totalDutyDays = sortedRecords.reduce((total, rec, idx) => {
         if (rec.type !== type)
@@ -470,7 +469,7 @@ const getDutyDays = (records, fromDate, toDate, type, excludeTravel = false, lea
         const rotationStart = (0, dayjs_1.default)(rec.startDate);
         let rotationEnd = rec.endDate
             ? (0, dayjs_1.default)(rec.endDate)
-            : (0, dayjs_1.default)(); // use today if no endDate
+            : end; // use today if no endDate
         const overlapStart = dayjs_1.default.max(rotationStart, start);
         const overlapEnd = dayjs_1.default.min(rotationEnd, end);
         if (overlapStart.isSameOrBefore(overlapEnd, "day")) {
@@ -516,6 +515,7 @@ const calculateRotationDays = (entitlement, startDate, endDate, workingDays, use
         }))
         : Number(totalDays) * Number(entitlement);
 };
+exports.calculateRotationDays = calculateRotationDays;
 const getDailyAccruedLeaveNew = (method, enti, daysDiff = 1) => {
     if (!method || enti == null)
         return 0;
@@ -562,7 +562,7 @@ const getLeaveAccrualNew = (method, entitlement, startDate, endDate, workingDays
     }
     else if (method ===
         constant_js_1.LEAVE_CALCULATION_METHODS_CONSTANTS.DAYS_ACCRUED_DAYS_WORKED_BASED_ON_ROTATION) {
-        totalDays = calculateRotationDays(entitlement ?? 0, startDate ?? "", endDate ?? "", !Array.isArray(workingDays) ? workingDays : null, userId);
+        totalDays = (0, exports.calculateRotationDays)(entitlement ?? 0, startDate ?? "", endDate ?? "", !Array.isArray(workingDays) ? workingDays : null, userId);
     }
     else if (method === constant_js_1.LEAVE_CALCULATION_METHODS_CONSTANTS.LEAVE_ENTITLEMENT_LEAVE_TAKEN) {
         totalDays = entitlement ?? 0;
@@ -589,14 +589,14 @@ const totalLeaveTakenFromHireDateNew = (timeoffs, activeContract, startDatem, en
         ? (0, dayjs_1.default)(endDatem)
         : (0, dayjs_1.default)((0, exports.leaveAccrualEndDate)(timeoffs));
     let totalLeaveCount = 0;
-    if (timeoffs?.length) {
+    if (timeoffs?.length && leaveType !== "Rotation") {
         totalLeaveCount = (0, exports.calculateLeaveWithAccruableCommon)(timeoffs, activeContract, leaveType, false, globalStart, globalEnd, leaveCountType);
     }
     let rotationDays = 0;
     if (activeContract?.contractType === constant_js_1.CONTRACT_TYPES.ROTATION &&
-        !leaveType) {
+        (!leaveType || leaveType === "Rotation")) {
         const rotationWorkingDays = workingDays && !Array.isArray(workingDays) ? workingDays : null;
-        rotationDays = calculateRotationDays(1, globalStart, globalEnd, rotationWorkingDays, userId, "OffDuty", leaveCountType);
+        rotationDays = (0, exports.calculateRotationDays)(1, globalStart, globalEnd, rotationWorkingDays, userId, "OffDuty", leaveCountType);
     }
     if (leaveCountType === constant_js_1.LEAVE_COUNT_TYPES.TYPEWISE) {
         const rotationTotal = (totalLeaveCount.Rotation || 0) + rotationDays;
@@ -633,7 +633,7 @@ const calculateLeaveNew = (paySlipHistory, timeoffs, activeContract, workingDays
     const leaveAcEndDate = endDate ? (0, dayjs_1.default)(endDate) : (0, dayjs_1.default)();
     if (!leaveAcStartDate)
         return 0;
-    const getLeaveAccrual = (0, exports.getLeaveAccrualNew)(calculationMethod, leaveEntitlement, leaveAcStartDate.toISOString(), leaveAcEndDate.toISOString(), activeContract?.contractType === constant_js_1.CONTRACT_TYPES.ROTATION
+    const getLeaveAccrual = (0, exports.getLeaveAccrualNew)(calculationMethod, leaveEntitlement, leaveAcStartDate.format("YYYY-MM-DD"), leaveAcEndDate.format("YYYY-MM-DD"), activeContract?.contractType === constant_js_1.CONTRACT_TYPES.ROTATION
         ? rotationWorkedDays
         : workingDays, userId);
     const carriedOverResult = (0, exports.leaveCarriedOverFromPreviousYearFunction)(activeContract);
@@ -645,11 +645,6 @@ const calculateLeaveNew = (paySlipHistory, timeoffs, activeContract, workingDays
         : null, userId, undefined, constant_js_1.LEAVE_COUNT_TYPES.TOTAL);
     const nonAccrualLeave = (0, exports.calculateNonAccruableLeave)(timeoffs, activeContract, undefined, accrualSets);
     const payslipLeaveAdjustments = (0, exports.getPayslipLeaveAdjustments)(paySlipHistory, activeContract);
-    console.log("carriedOverLeave", carriedOverLeave);
-    console.log("getLeaveAccrual", getLeaveAccrual);
-    console.log("usedLeave", usedLeave);
-    console.log("nonAccrualLeave", nonAccrualLeave);
-    console.log("payslipLeaveAdjustments", payslipLeaveAdjustments);
     const totalLeave = +carriedOverLeave +
         getLeaveAccrual -
         usedLeave -

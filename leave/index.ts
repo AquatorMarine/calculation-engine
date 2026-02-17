@@ -155,7 +155,7 @@ export const getSegmentDateRange = (
   formatDate: (d: Date) => string | Date = defaultFormatDate
 ): string | { startDate: string | Date | null; endDate: string | Date | null } => {
   const format = (d: Dayjs) =>
-    dateReturn ? d.toDate() : formatDate(d.toDate());
+    dateReturn ? d.format("YYYY-MM-DD") : formatDate(d.toDate());
 
   const payslipStart = payslipRange?.[0] ? dayjs(payslipRange[0]) : null;
   const payslipEnd = payslipRange?.[1] ? dayjs(payslipRange[1]) : null;
@@ -653,7 +653,7 @@ export const getDutyDays = (
     .slice()
     .sort((a, b) => dayjs(a.startDate).diff(dayjs(b.startDate)));
 
-  const sortedRecords = adjustEndDates(record);  
+  const sortedRecords = adjustEndDates(record);
   const travelDays = getAllTravelDays(sortedRecords);
   const totalDutyDays = sortedRecords.reduce((total, rec, idx) => {
     if (rec.type !== type) return total;
@@ -661,7 +661,7 @@ export const getDutyDays = (
     const rotationStart = dayjs(rec.startDate);
     let rotationEnd = rec.endDate
       ? dayjs(rec.endDate)
-      : dayjs(); // use today if no endDate
+      : end; // use today if no endDate
 
     const overlapStart = dayjs.max(rotationStart, start);
     const overlapEnd = dayjs.min(rotationEnd, end);
@@ -702,7 +702,7 @@ export const getDutyDays = (
   return totalDutyDays;
 };
 
-const calculateRotationDays = (
+export const calculateRotationDays = (
   entitlement: number,
   startDate: string | Date | Dayjs,
   endDate: string | Date | Dayjs,
@@ -714,6 +714,7 @@ const calculateRotationDays = (
   const userSchedules = workingDays?.schedules?.filter(
     (schedule) => schedule.userId === userId
   );
+
   if (!userSchedules?.length) {
     if (leaveCountType === LEAVE_COUNT_TYPES.MONTHLY) {
       return MONTHS_ARRAY.map((month) => ({ x: month, y: 0 }));
@@ -873,7 +874,7 @@ export const totalLeaveTakenFromHireDateNew = (
     : dayjs(leaveAccrualEndDate(timeoffs));
 
   let totalLeaveCount: any = 0;
-  if (timeoffs?.length) {
+  if (timeoffs?.length && leaveType !== "Rotation") {
     totalLeaveCount = calculateLeaveWithAccruableCommon(
       timeoffs,
       activeContract,
@@ -888,7 +889,7 @@ export const totalLeaveTakenFromHireDateNew = (
   let rotationDays: any = 0;
   if (
     activeContract?.contractType === CONTRACT_TYPES.ROTATION &&
-    !leaveType
+    (!leaveType || leaveType === "Rotation")
   ) {
 
     const rotationWorkingDays =
@@ -957,8 +958,8 @@ export const calculateLeaveNew = (
   const getLeaveAccrual = getLeaveAccrualNew(
     calculationMethod,
     leaveEntitlement,
-    leaveAcStartDate.toISOString(),
-    leaveAcEndDate.toISOString(),
+    leaveAcStartDate.format("YYYY-MM-DD"),
+    leaveAcEndDate.format("YYYY-MM-DD"),
     activeContract?.contractType === CONTRACT_TYPES.ROTATION
       ? rotationWorkedDays
       : (workingDays as WorkingDaysLike[] | null | undefined),

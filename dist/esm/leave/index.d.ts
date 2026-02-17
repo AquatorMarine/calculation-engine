@@ -54,6 +54,12 @@ export declare const getDutyDays: (records: ScheduleLike[], fromDate: string | D
     x: string;
     y: number;
 }[];
+export declare const calculateRotationDays: (entitlement: number, startDate: string | Date | Dayjs, endDate: string | Date | Dayjs, workingDays: {
+    schedules?: ScheduleLike[];
+} | null | undefined, userId: string | undefined, dutyType?: string, leaveCountType?: (typeof LEAVE_COUNT_TYPES)[keyof typeof LEAVE_COUNT_TYPES]) => number | Array<{
+    x: string;
+    y: number;
+}>;
 export declare const getDailyAccruedLeaveNew: (method: string | undefined, enti: number | undefined, daysDiff?: number) => number;
 export declare const getLeaveAccrualNew: (method: string | undefined, entitlement: number | undefined, startDate: string | Date | undefined, endDate: string | Date | undefined, workingDays: WorkingDaysLike[] | {
     schedules?: ScheduleLike[];
