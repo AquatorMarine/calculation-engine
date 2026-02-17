@@ -553,7 +553,8 @@ export const calculateLeaveWithAccruableCommon = (
 
         if (inWindow) {
           const isTravelDay = leave.travelDays?.some((travel) => {
-            const [tStart, tEnd] = travel.dateRange;
+            if (!travel?.dateRange?.length) return false;
+            const [tStart, tEnd] = travel?.dateRange ?? [];
             return currentDay.isBetween(dayjs(tStart), dayjs(tEnd), "day", "[]");
           });
           if (!isTravelDay) {
@@ -604,6 +605,27 @@ export const getAllTravelDays = (data: any[]): string[] => {
   return [...new Set(result)].sort();
 };
 
+function adjustEndDates(contracts: any[]) {
+  // Sort by startDate to ensure correct order
+  contracts.sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf());
+
+  for (let i = 0; i < contracts.length - 1; i++) {
+    const current = contracts[i];
+    const next = contracts[i + 1];
+
+    if (!current.endDate || !next.startDate) continue;
+
+    const currentEnd = dayjs(current.endDate);
+    const nextStart = dayjs(next.startDate);
+
+    // If current end equals next start
+    if (currentEnd.isSame(nextStart, "day")) {
+      current.endDate = currentEnd.subtract(1, "day").format("YYYY-MM-DD");
+    }
+  }
+
+  return contracts;
+}
 
 export const getDutyDays = (
   records: ScheduleLike[],
@@ -627,19 +649,19 @@ export const getDutyDays = (
       : 0;
   }
 
-  const sortedRecords = records
+  const record = records
     .slice()
     .sort((a, b) => dayjs(a.startDate).diff(dayjs(b.startDate)));
 
+  const sortedRecords = adjustEndDates(record);  
   const travelDays = getAllTravelDays(sortedRecords);
   const totalDutyDays = sortedRecords.reduce((total, rec, idx) => {
     if (rec.type !== type) return total;
 
     const rotationStart = dayjs(rec.startDate);
-    const rotationEnd = rec.endDate
+    let rotationEnd = rec.endDate
       ? dayjs(rec.endDate)
       : dayjs(); // use today if no endDate
-
 
     const overlapStart = dayjs.max(rotationStart, start);
     const overlapEnd = dayjs.min(rotationEnd, end);
@@ -647,7 +669,6 @@ export const getDutyDays = (
     if (overlapStart.isSameOrBefore(overlapEnd, "day")) {
       let currentDay = overlapStart;
       let diffDays = 0;
-
 
       while (currentDay.isSameOrBefore(overlapEnd, "day")) {
         let isTravelDay = false;
@@ -889,13 +910,13 @@ export const totalLeaveTakenFromHireDateNew = (
 
     return Object.keys(totalLeaveCount).length > 0
       ? {
-          ...totalLeaveCount,
-          ...(rotationTotal > 0 ? { Rotation: rotationTotal } : {})
-        }
+        ...totalLeaveCount,
+        ...(rotationTotal > 0 ? { Rotation: rotationTotal } : {})
+      }
       : rotationTotal > 0
         ? { Rotation: rotationTotal }
         : {};
-      }
+  }
 
   if (leaveCountType === LEAVE_COUNT_TYPES.MONTHLY) {
     const leaveMonthly = totalLeaveCount as unknown as Array<{ x: string; y: number }>;

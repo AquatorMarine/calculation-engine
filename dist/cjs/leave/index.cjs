@@ -379,7 +379,9 @@ const calculateLeaveWithAccruableCommon = (timeoffs, activeContract, leaveType, 
                 const inWindow = currentDay.isBetween(globalStart, globalEnd, "day", "[]");
                 if (inWindow) {
                     const isTravelDay = leave.travelDays?.some((travel) => {
-                        const [tStart, tEnd] = travel.dateRange;
+                        if (!travel?.dateRange?.length)
+                            return false;
+                        const [tStart, tEnd] = travel?.dateRange ?? [];
                         return currentDay.isBetween((0, dayjs_1.default)(tStart), (0, dayjs_1.default)(tEnd), "day", "[]");
                     });
                     if (!isTravelDay) {
@@ -427,6 +429,23 @@ const getAllTravelDays = (data) => {
     return [...new Set(result)].sort();
 };
 exports.getAllTravelDays = getAllTravelDays;
+function adjustEndDates(contracts) {
+    // Sort by startDate to ensure correct order
+    contracts.sort((a, b) => (0, dayjs_1.default)(a.startDate).valueOf() - (0, dayjs_1.default)(b.startDate).valueOf());
+    for (let i = 0; i < contracts.length - 1; i++) {
+        const current = contracts[i];
+        const next = contracts[i + 1];
+        if (!current.endDate || !next.startDate)
+            continue;
+        const currentEnd = (0, dayjs_1.default)(current.endDate);
+        const nextStart = (0, dayjs_1.default)(next.startDate);
+        // If current end equals next start
+        if (currentEnd.isSame(nextStart, "day")) {
+            current.endDate = currentEnd.subtract(1, "day").format("YYYY-MM-DD");
+        }
+    }
+    return contracts;
+}
 const getDutyDays = (records, fromDate, toDate, type, excludeTravel = false, leaveCountType = constant_js_1.LEAVE_COUNT_TYPES.TOTAL) => {
     const start = (0, dayjs_1.default)(fromDate);
     const end = (0, dayjs_1.default)(toDate);
@@ -439,15 +458,17 @@ const getDutyDays = (records, fromDate, toDate, type, excludeTravel = false, lea
             ? monthWiseCounts
             : 0;
     }
-    const sortedRecords = records
+    const record = records
         .slice()
         .sort((a, b) => (0, dayjs_1.default)(a.startDate).diff((0, dayjs_1.default)(b.startDate)));
+    const sortedRecords = adjustEndDates(record);
+    console.log("sortedRecords before get all travel days", sortedRecords);
     const travelDays = (0, exports.getAllTravelDays)(sortedRecords);
     const totalDutyDays = sortedRecords.reduce((total, rec, idx) => {
         if (rec.type !== type)
             return total;
         const rotationStart = (0, dayjs_1.default)(rec.startDate);
-        const rotationEnd = rec.endDate
+        let rotationEnd = rec.endDate
             ? (0, dayjs_1.default)(rec.endDate)
             : (0, dayjs_1.default)(); // use today if no endDate
         const overlapStart = dayjs_1.default.max(rotationStart, start);
@@ -624,6 +645,11 @@ const calculateLeaveNew = (paySlipHistory, timeoffs, activeContract, workingDays
         : null, userId, undefined, constant_js_1.LEAVE_COUNT_TYPES.TOTAL);
     const nonAccrualLeave = (0, exports.calculateNonAccruableLeave)(timeoffs, activeContract, undefined, accrualSets);
     const payslipLeaveAdjustments = (0, exports.getPayslipLeaveAdjustments)(paySlipHistory, activeContract);
+    console.log("carriedOverLeave", carriedOverLeave);
+    console.log("getLeaveAccrual", getLeaveAccrual);
+    console.log("usedLeave", usedLeave);
+    console.log("nonAccrualLeave", nonAccrualLeave);
+    console.log("payslipLeaveAdjustments", payslipLeaveAdjustments);
     const totalLeave = +carriedOverLeave +
         getLeaveAccrual -
         usedLeave -
