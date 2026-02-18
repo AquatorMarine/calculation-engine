@@ -640,7 +640,7 @@ const calculateLeaveNew = (paySlipHistory, timeoffs, activeContract, workingDays
     const carriedOverLeave = typeof carriedOverResult === "object" && carriedOverResult !== null
         ? carriedOverResult.leaveCarriedOver ?? 0
         : 0;
-    const usedLeave = (0, exports.totalLeaveTakenFromHireDateNew)(timeoffs, activeContract, leaveAcStartDate, leaveAcEndDate, activeContract?.contractType === constant_js_1.CONTRACT_TYPES.ROTATION
+    const usedLeave = (0, exports.totalLeaveTakenFromHireDateNew)(timeoffs, activeContract, leaveAcStartDate, endDate ? leaveAcEndDate : undefined, activeContract?.contractType === constant_js_1.CONTRACT_TYPES.ROTATION
         ? rotationWorkedDays
         : null, userId, undefined, constant_js_1.LEAVE_COUNT_TYPES.TOTAL);
     const nonAccrualLeave = (0, exports.calculateNonAccruableLeave)(timeoffs, activeContract, undefined, accrualSets);

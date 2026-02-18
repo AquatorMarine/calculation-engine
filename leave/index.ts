@@ -976,7 +976,7 @@ export const calculateLeaveNew = (
     timeoffs,
     activeContract,
     leaveAcStartDate,
-    leaveAcEndDate,
+    endDate ?leaveAcEndDate : undefined,
     activeContract?.contractType === CONTRACT_TYPES.ROTATION
       ? rotationWorkedDays
       : null,
