@@ -1,6 +1,6 @@
 import { type Dayjs } from "dayjs";
 import { LEAVE_COUNT_TYPES } from "../contract/constant.js";
-import type { PayslipLike, TimeoffLike, ContractLike, PaySlipHistoryLike, WorkingDaysLike, ScheduleLike, AccrualSetsLike } from "./types.js";
+import type { PayslipLike, TimeoffLike, ContractLike, PaySlipHistoryLike, WorkingDaysLike, ScheduleLike, AccrualSetsLike, LeaveBalanceBreakdown } from "./types.js";
 export declare const isAbleToGenerateLeaveForSelectedDateRange: (payslips: PayslipLike[] | undefined, leaveStartDate: string | Date | undefined, leaveEndDate: string | Date | undefined) => boolean;
 export declare const isThereAnyPendingLeaveBetweenSelectedPayslipDateRange: (timeoffs: TimeoffLike[] | undefined, startDate: string | Date | undefined, endDate: string | Date | undefined) => boolean;
 export declare const deriveAccrualSets: (leaveSettings: Array<{
@@ -71,6 +71,11 @@ export declare const totalLeaveTakenFromHireDateNew: (timeoffs: TimeoffLike[] | 
     x: string;
     y: number;
 }> | Record<string, number>;
+export declare const getLeaveBalanceBreakdown: (paySlipHistory: PaySlipHistoryLike[] | null | undefined, timeoffs: TimeoffLike[] | null | undefined, activeContract: ContractLike | null | undefined, workingDays: WorkingDaysLike[] | {
+    schedules?: ScheduleLike[];
+} | null | undefined, rotationWorkedDays: {
+    schedules?: ScheduleLike[];
+} | null | undefined, userId: string | undefined, startDate: string | Date | undefined, endDate: string | Date | undefined, accrualSets: AccrualSetsLike | null | undefined) => LeaveBalanceBreakdown;
 export declare const calculateLeaveNew: (paySlipHistory: PaySlipHistoryLike[] | null | undefined, timeoffs: TimeoffLike[] | null | undefined, activeContract: ContractLike | null | undefined, workingDays: WorkingDaysLike[] | {
     schedules?: ScheduleLike[];
 } | null | undefined, rotationWorkedDays: {

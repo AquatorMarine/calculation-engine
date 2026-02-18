@@ -56,3 +56,12 @@ export interface AccrualSetsLike {
   accruable?: Set<string>;
   nonAccruable?: Set<string>;
 }
+
+export interface LeaveBalanceBreakdown {
+  carriedOver: number;
+  leaveAccrual: number;
+  usedLeave: number;
+  nonAccrualLeave: number;
+  payslipAdjustments: number;
+  total: number;
+}

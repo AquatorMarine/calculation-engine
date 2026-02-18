@@ -20,6 +20,7 @@ import type {
   WorkingDaysLike,
   ScheduleLike,
   AccrualSetsLike,
+  LeaveBalanceBreakdown,
 } from "./types.js";
 
 dayjs.extend(isBetween);
@@ -932,7 +933,16 @@ export const totalLeaveTakenFromHireDateNew = (
   return typeof totalLeaveCount === "string" || typeof totalLeaveCount === "number" ? totalLeaveCount + rotationDays : totalLeaveCount || 0;
 };
 
-export const calculateLeaveNew = (
+const emptyBreakdown: LeaveBalanceBreakdown = {
+  carriedOver: 0,
+  leaveAccrual: 0,
+  usedLeave: 0,
+  nonAccrualLeave: 0,
+  payslipAdjustments: 0,
+  total: 0,
+};
+
+export const getLeaveBalanceBreakdown = (
   paySlipHistory: PaySlipHistoryLike[] | null | undefined,
   timeoffs: TimeoffLike[] | null | undefined,
   activeContract: ContractLike | null | undefined,
@@ -942,8 +952,8 @@ export const calculateLeaveNew = (
   startDate: string | Date | undefined,
   endDate: string | Date | undefined,
   accrualSets: AccrualSetsLike | null | undefined
-): number => {
-  if (!activeContract) return 0;
+): LeaveBalanceBreakdown => {
+  if (!activeContract) return emptyBreakdown;
 
   const contractLeave = activeContract?.leave || {};
   const { calculationMethod, leaveEntitlement } = contractLeave;
@@ -953,9 +963,9 @@ export const calculateLeaveNew = (
     : leaveAccrualStartDate(activeContract);
   const leaveAcEndDate = endDate ? dayjs(endDate) : dayjs();
 
-  if (!leaveAcStartDate) return 0;
+  if (!leaveAcStartDate) return emptyBreakdown;
 
-  const getLeaveAccrual = getLeaveAccrualNew(
+  const leaveAccrual = getLeaveAccrualNew(
     calculationMethod,
     leaveEntitlement,
     leaveAcStartDate.format("YYYY-MM-DD"),
@@ -967,7 +977,7 @@ export const calculateLeaveNew = (
   );
 
   const carriedOverResult = leaveCarriedOverFromPreviousYearFunction(activeContract);
-  const carriedOverLeave =
+  const carriedOver =
     typeof carriedOverResult === "object" && carriedOverResult !== null
       ? carriedOverResult.leaveCarriedOver ?? 0
       : 0;
@@ -976,7 +986,7 @@ export const calculateLeaveNew = (
     timeoffs,
     activeContract,
     leaveAcStartDate,
-    endDate ?leaveAcEndDate : undefined,
+    endDate ? leaveAcEndDate : undefined,
     activeContract?.contractType === CONTRACT_TYPES.ROTATION
       ? rotationWorkedDays
       : null,
@@ -992,19 +1002,50 @@ export const calculateLeaveNew = (
     accrualSets
   );
 
-  const payslipLeaveAdjustments = getPayslipLeaveAdjustments(
+  const payslipAdjustments = getPayslipLeaveAdjustments(
     paySlipHistory,
     activeContract
   );
 
-  const totalLeave =
-    +carriedOverLeave +
-    getLeaveAccrual -
+  const total =
+    +carriedOver +
+    leaveAccrual -
     usedLeave -
     nonAccrualLeave -
-    payslipLeaveAdjustments;
+    payslipAdjustments;
 
-  return allLeaveCalculationDecimalPlaces(totalLeave);
+  return {
+    carriedOver,
+    leaveAccrual,
+    usedLeave,
+    nonAccrualLeave,
+    payslipAdjustments,
+    total: allLeaveCalculationDecimalPlaces(total),
+  };
+};
+
+export const calculateLeaveNew = (
+  paySlipHistory: PaySlipHistoryLike[] | null | undefined,
+  timeoffs: TimeoffLike[] | null | undefined,
+  activeContract: ContractLike | null | undefined,
+  workingDays: WorkingDaysLike[] | { schedules?: ScheduleLike[] } | null | undefined,
+  rotationWorkedDays: { schedules?: ScheduleLike[] } | null | undefined,
+  userId: string | undefined,
+  startDate: string | Date | undefined,
+  endDate: string | Date | undefined,
+  accrualSets: AccrualSetsLike | null | undefined
+): number => {
+  return getLeaveBalanceBreakdown(
+    paySlipHistory,
+    timeoffs,
+    activeContract,
+    workingDays,
+    rotationWorkedDays,
+    userId,
+    startDate,
+    endDate,
+    accrualSets
+  ).total;
 };
 
 export const getLeaveAccrualMultipleContracts = (
