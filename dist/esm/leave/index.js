@@ -39,7 +39,7 @@ export const isThereAnyPendingLeaveBetweenSelectedPayslipDateRange = (timeoffs =
             return false;
         return (ls.isSameOrBefore(toEnd, "day") &&
             le.isSameOrAfter(toStart, "day") &&
-            timeoff.status !== "Approved");
+            timeoff.status === "Pending");
     });
 };
 export const deriveAccrualSets = (leaveSettings) => {
