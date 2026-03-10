@@ -1,5 +1,5 @@
 {
-"name": "@aquatormarine/calculation-engine",
+  "name": "@aquatormarine/calculation-engine",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/cjs/index.cjs",
@@ -40,6 +40,11 @@
       "types": "./dist/esm/leave/index.d.ts",
       "import": "./dist/esm/leave/index.js",
       "require": "./dist/cjs/leave/index.cjs"
+    },
+    "./crypto": {
+      "types": "./dist/esm/crypto/index.d.ts",
+      "import": "./dist/esm/crypto/index.js",
+      "require": "./dist/cjs/crypto/index.cjs"
     }
   },
   "files": [
@@ -51,9 +56,11 @@
     "build": "npm run build:esm && npm run build:cjs"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.19"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "typescript": "^5.0.0"
   }
 }
