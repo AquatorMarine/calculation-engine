@@ -45,6 +45,11 @@
       "types": "./dist/esm/crypto/index.d.ts",
       "import": "./dist/esm/crypto/index.js",
       "require": "./dist/cjs/crypto/index.cjs"
+    },
+    "./subscription": {
+      "types": "./dist/esm/subscription/index.d.ts",
+      "import": "./dist/esm/subscription/index.js",
+      "require": "./dist/cjs/subscription/index.cjs"
     }
   },
   "files": [
