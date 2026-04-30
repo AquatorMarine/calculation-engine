@@ -827,7 +827,9 @@ export const calculateNonAccruableLeave = (
   timeoffs: TimeoffLike[] | null | undefined,
   activeContract: ContractLike | null | undefined,
   leaveType: string | undefined,
-  accrualSets: AccrualSetsLike | null | undefined
+  accrualSets: AccrualSetsLike | null | undefined,
+  startDate: string | Date | Dayjs | undefined,
+  endDate: string | Date | Dayjs | undefined
 ): number => {
   const nonAccruableLeaves = accrualSets?.nonAccruable;
 
@@ -836,8 +838,8 @@ export const calculateNonAccruableLeave = (
     activeContract,
     leaveType,
     nonAccruableLeaves ?? false,
-    undefined,
-    undefined,
+    startDate,
+    endDate,
     LEAVE_COUNT_TYPES.TOTAL
   ) as number;
 
@@ -999,14 +1001,16 @@ export const getLeaveBalanceBreakdown = (
     timeoffs,
     activeContract,
     undefined,
-    accrualSets
+    accrualSets,
+    leaveAcStartDate,
+    leaveAcEndDate
   );
 
   const payslipAdjustments = getPayslipLeaveAdjustments(
     paySlipHistory,
     activeContract
   );
-
+  
   const total =
     +carriedOver +
     leaveAccrual -

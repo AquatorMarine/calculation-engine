@@ -573,9 +573,9 @@ const getLeaveAccrualNew = (method, entitlement, startDate, endDate, workingDays
     return totalDays;
 };
 exports.getLeaveAccrualNew = getLeaveAccrualNew;
-const calculateNonAccruableLeave = (timeoffs, activeContract, leaveType, accrualSets) => {
+const calculateNonAccruableLeave = (timeoffs, activeContract, leaveType, accrualSets, startDate, endDate) => {
     const nonAccruableLeaves = accrualSets?.nonAccruable;
-    const leaveCount = (0, exports.calculateLeaveWithAccruableCommon)(timeoffs, activeContract, leaveType, nonAccruableLeaves ?? false, undefined, undefined, constant_js_1.LEAVE_COUNT_TYPES.TOTAL);
+    const leaveCount = (0, exports.calculateLeaveWithAccruableCommon)(timeoffs, activeContract, leaveType, nonAccruableLeaves ?? false, startDate, endDate, constant_js_1.LEAVE_COUNT_TYPES.TOTAL);
     const totalLeaveToNonAccruable = leaveCount *
         (0, exports.getDailyAccruedLeaveNew)(activeContract?.leave?.calculationMethod, activeContract?.leave?.leaveEntitlement);
     return totalLeaveToNonAccruable;
@@ -651,7 +651,7 @@ const getLeaveBalanceBreakdown = (paySlipHistory, timeoffs, activeContract, work
     const usedLeave = (0, exports.totalLeaveTakenFromHireDateNew)(timeoffs, activeContract, leaveAcStartDate, endDate ? leaveAcEndDate : undefined, activeContract?.contractType === constant_js_1.CONTRACT_TYPES.ROTATION
         ? rotationWorkedDays
         : null, userId, undefined, constant_js_1.LEAVE_COUNT_TYPES.TOTAL);
-    const nonAccrualLeave = (0, exports.calculateNonAccruableLeave)(timeoffs, activeContract, undefined, accrualSets);
+    const nonAccrualLeave = (0, exports.calculateNonAccruableLeave)(timeoffs, activeContract, undefined, accrualSets, leaveAcStartDate, leaveAcEndDate);
     const payslipAdjustments = (0, exports.getPayslipLeaveAdjustments)(paySlipHistory, activeContract);
     const total = +carriedOver +
         leaveAccrual -
