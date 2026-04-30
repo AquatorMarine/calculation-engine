@@ -651,7 +651,7 @@ const getLeaveBalanceBreakdown = (paySlipHistory, timeoffs, activeContract, work
     const usedLeave = (0, exports.totalLeaveTakenFromHireDateNew)(timeoffs, activeContract, leaveAcStartDate, endDate ? leaveAcEndDate : undefined, activeContract?.contractType === constant_js_1.CONTRACT_TYPES.ROTATION
         ? rotationWorkedDays
         : null, userId, undefined, constant_js_1.LEAVE_COUNT_TYPES.TOTAL);
-    const nonAccrualLeave = (0, exports.calculateNonAccruableLeave)(timeoffs, activeContract, undefined, accrualSets, leaveAcStartDate, leaveAcEndDate);
+    const nonAccrualLeave = (0, exports.calculateNonAccruableLeave)(timeoffs, activeContract, undefined, accrualSets, startDate, endDate);
     const payslipAdjustments = (0, exports.getPayslipLeaveAdjustments)(paySlipHistory, activeContract);
     const total = +carriedOver +
         leaveAccrual -

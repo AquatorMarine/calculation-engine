@@ -1002,8 +1002,8 @@ export const getLeaveBalanceBreakdown = (
     activeContract,
     undefined,
     accrualSets,
-    leaveAcStartDate,
-    leaveAcEndDate
+    startDate,
+    endDate
   );
 
   const payslipAdjustments = getPayslipLeaveAdjustments(
